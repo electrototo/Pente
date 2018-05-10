@@ -150,6 +150,7 @@ void coordinates(int pente[MAX][MAX], game_info_t **head)
 
         do
         {
+            print(pente);
             printf("\nTURNO Jugador %d\n", jugador);
             printf("Coordenada x: ");
             scanf("%d", &cor_x);
@@ -182,7 +183,7 @@ void coordinates(int pente[MAX][MAX], game_info_t **head)
                         clear_hit(&first, pente, VAL1);
                     }
                     printf("\nContador filas 2 = %d\n", temp_2);
-                    printf("hit_t jugador 2 = %d\n", hit_dos);
+                    printf("Comidas jugador 2 = %d\n", hit_dos);
                 }
             }
             else
@@ -190,7 +191,6 @@ void coordinates(int pente[MAX][MAX], game_info_t **head)
             enter_data(head, hit_uno, hit_dos, temp_1, temp_2, jugador);
 
             (*head)->child = create_list(pente, &(*head)->items);
-            print(pente);
         } while (pente[cor_y][cor_x] != jugador && pente[cor_y][cor_x] == next);
         contador++;
     } while ((temp_1 != 2 && temp_1 != -1) && (temp_2 != 2 && temp_2 != -1));
