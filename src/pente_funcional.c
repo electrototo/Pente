@@ -141,7 +141,7 @@ void save_plays(plays_t *head)
 void coordinates(int pente[MAX][MAX], game_info_t **head)
 {
     hit_t *first = NULL; //inicializar lista de hits
-    int cor_x, cor_y, jugador, contador = 1, temp_1, temp_2, hit = 0;
+    int cor_x, cor_y, jugador, contador = 1, temp_1 = 0, temp_2 = 0, hit = 0;
     int hit_uno = 0, hit_dos = 0, next;
     do
     {
