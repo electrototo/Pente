@@ -170,6 +170,12 @@ void coordinates(int pente[MAX][MAX], game_info_t **head)
                         hit_uno = hit_uno + hit;
                         clear_hit(&first, pente, VAL2);
                     }
+                    hit = count_hit(pente, contador + 1, &first);
+                    if (first != NULL)
+                    {
+                        hit_dos = hit_dos + hit;
+                        clear_hit(&first, pente, VAL1);
+                    }
                     printf("\nContador filas 1 = %d\n", temp_1);
                     printf("Comidas jugador 1 = %d\n\n", hit_uno);
                 }
@@ -181,6 +187,12 @@ void coordinates(int pente[MAX][MAX], game_info_t **head)
                     {
                         hit_dos = hit_dos + hit;
                         clear_hit(&first, pente, VAL1);
+                    }
+                    hit = count_hit(pente, contador + 1, &first);
+                    if (first != NULL)
+                    {
+                        hit_dos = hit_dos + hit;
+                        clear_hit(&first, pente, VAL2);
                     }
                     printf("\nContador filas 2 = %d\n", temp_2);
                     printf("Comidas jugador 2 = %d\n", hit_dos);
