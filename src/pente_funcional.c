@@ -40,7 +40,7 @@ void pause();
 void coordinates(int pente[MAX][MAX], game_info_t **head);
 void file(char name[30]);
 void load_plays(int pente[MAX][MAX], game_info_t **head);
-void save_plays(game_info_t **head);
+void save_plays(game_info_t *head);
 void enter_data(game_info_t **head, int comida1, int comida2, int contador1, int contador2, int jugador);
 plays_t *create_list(int pente[MAX][MAX], int *total);
 void undo(game_info_t **head);
@@ -163,14 +163,14 @@ void coordinates(int pente[MAX][MAX], game_info_t **head)
             }
             else
                 printf("<Lugar ya ocupado>\n");
-            clear_history(head);
+            //clear_history(head);
             enter_data(head, hit_uno, hit_dos, temp_1, temp_2, jugador);
             (*head)->child = create_list(pente, &(*head)->items);
         } while ((pente[cor_y][cor_x] != jugador && pente[cor_y][cor_x] == next)
         || (cor_x < 0 || cor_x >= MAX || cor_y < 0 || cor_y >= MAX));
         contador++;
-    } while ((temp_1 != 5 && temp_1 != -1) && (temp_2 != 5 && temp_2 != -1) && contador < MAX*MAX);
-    save_plays(head);
+    } while ((temp_1 != 5 && temp_1 != -1) && (temp_2 != 5 && temp_2 != -1) && contador < (MAX*MAX));
+    save_plays(*head);
     erase_hits(&first);
     erase_game(head);
 }
