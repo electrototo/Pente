@@ -70,6 +70,7 @@ void erase_plays(plays_t **head);
 
 int main() {
     Pente();
+    printf("\nCerrando juego\n");
     return 0;
 }
 
@@ -203,7 +204,8 @@ void coordinates(int pente[MAX][MAX], game_info_t **head)
             enter_data(head, hit_uno, hit_dos, temp_1, temp_2, jugador);
 
             (*head)->child = create_list(pente, &(*head)->items);
-        } while (pente[cor_y][cor_x] != jugador && pente[cor_y][cor_x] == next);
+        } while ((pente[cor_y][cor_x] != jugador && pente[cor_y][cor_x] == next)
+        || (cor_x < 0 || cor_x >= MAX || cor_y < 0 || cor_y >= MAX));
         contador++;
     } while ((temp_1 != 5 && temp_1 != -1) && (temp_2 != 5 && temp_2 != -1));
     erase_hits(&first);
