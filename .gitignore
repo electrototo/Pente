@@ -1,0 +1,10 @@
+*
+!*.c
+!.gitignore
+!README.md
+!compile_all.sh
+!*.h
+!makefile
+!*/
+!Makefile
+!*.jpg
