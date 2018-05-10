@@ -4,6 +4,7 @@
 #define MAX 10
 #define VAL1 1
 #define VAL2 2
+//codigo funcional
 
 typedef struct hit_t
 {
