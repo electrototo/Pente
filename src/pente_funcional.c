@@ -39,8 +39,8 @@ void pause();
 /***********JUGADAS*************/
 void coordinates(int pente[MAX][MAX], game_info_t **head);
 void file(char name[30]);
-void load_plays(int pente[MAX][MAX]);
-void save_plays();
+void load_plays(int pente[MAX][MAX], game_info_t **head);
+void save_plays(game_info_t **head);
 void enter_data(game_info_t **head, int comida1, int comida2, int contador1, int contador2, int jugador);
 plays_t *create_list(int pente[MAX][MAX], int *total);
 void undo(game_info_t **head);
@@ -84,9 +84,8 @@ void Pente()
 
     printf("\n¿Desea cargar algun juego? [Si = 0/ No = 1]\n> "); //Igual a resume playing
     scanf("%d", &i);
-    if (i == 0)
-        //load_plays();
-        print(pente);
+    //if (i == 0)
+        //load_plays(pente, head);
     coordinates(pente, &head); //funcion encargada de la parte funcional del juego
 }
 
@@ -100,43 +99,6 @@ void clear_board(int pente[MAX][MAX])
             pente[i][j] = 0;
         }
     }
-}
-
-void load_plays(int pente[MAX][MAX]) {
-    //cambiar para guardar game_info y plays_t
-    int x, y, read_token_value;
-    FILE *fd;
-    char name[30];
-    file(name);
-    fd = fopen(name, "r");
-    if (fd == NULL)
-    {
-        printf("\n<file inexistente>\n");
-        return;
-    }
-    while (!feof(fd))
-    {
-        fscanf(fd, "%d|%d|%d\n", &x, &y, &read_token_value);
-        pente[y][x] = read_token_value;
-    }
-    fclose(fd);
-    printf("\n<file leido>\n");
-}
-
-void save_plays(plays_t *head)
-{ //Funcion para guardar lista dinamica game_info y plays_t en un archivo
-    FILE *f;
-    char name[30];
-    plays_t *temp;
-    temp = head;
-    //file(name);
-    f = fopen("juego", "w");
-    while (temp != NULL)
-    {
-        fprintf(f, "%d|%d|%d\n", temp->coor_x, temp->coor_y, temp->token_value);
-        temp = temp->sig;
-    }
-    fclose(f);
 }
 
 void coordinates(int pente[MAX][MAX], game_info_t **head)
@@ -201,15 +163,59 @@ void coordinates(int pente[MAX][MAX], game_info_t **head)
             }
             else
                 printf("<Lugar ya ocupado>\n");
+            clear_history(head);
             enter_data(head, hit_uno, hit_dos, temp_1, temp_2, jugador);
-
             (*head)->child = create_list(pente, &(*head)->items);
         } while ((pente[cor_y][cor_x] != jugador && pente[cor_y][cor_x] == next)
         || (cor_x < 0 || cor_x >= MAX || cor_y < 0 || cor_y >= MAX));
         contador++;
-    } while ((temp_1 != 5 && temp_1 != -1) && (temp_2 != 5 && temp_2 != -1));
+    } while ((temp_1 != 5 && temp_1 != -1) && (temp_2 != 5 && temp_2 != -1) && contador < MAX*MAX);
+    save_plays(head);
     erase_hits(&first);
     erase_game(head);
+}
+
+void load_plays(int pente[MAX][MAX], game_info_t **head) {
+    //cambiar para guardar game_info y plays_t
+    int x, y, read_token_value;
+    FILE *fd;
+    char name[30];
+    file(name);
+    fd = fopen(name, "r");
+    if (fd == NULL)
+    {
+        printf("\n<file inexistente>\n");
+        return;
+    }
+    while (!feof(fd))
+    {
+        fscanf(fd, "%d|%d|%d\n", &x, &y, &read_token_value);
+        pente[y][x] = read_token_value;
+    }
+    fclose(fd);
+    printf("\n<file leido>\n");
+}
+
+void save_plays(game_info_t *head)
+{ //Funcion para guardar lista dinamica game_info y plays_t en un archivo
+    FILE *f;
+    char name[30];
+    game_info_t *temp;
+    plays_t *cursor;
+    temp = head;
+    //file(name);
+    f = fopen("juego.ice", "w");
+    while (temp != NULL)
+    {
+        fwrite(temp, sizeof(temp), 1, f);
+        cursor = temp->child; 
+        while(cursor != NULL){
+            fwrite(cursor, sizeof(cursor), 1, f);
+            cursor = cursor->sig; 
+        }
+        temp = temp->sig;
+    }
+    fclose(f);
 }
 
 void board(int pente[MAX][MAX], int x, int y, int jugador)
@@ -496,10 +502,12 @@ void erase_plays(plays_t **head) //funcion limpia lista de game
 
 void undo(game_info_t **head)
 {
+    *head = (*head)->sig;
 }
 
 void redo(game_info_t **head)
 {
+    *head = (*head)->ant;
 }
 
 void clear_history(game_info_t **head)
