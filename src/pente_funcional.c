@@ -195,8 +195,8 @@ void coordinates(int pente[MAX][MAX], game_info_t **head)
                 }
                 printf("\nContador filas 1 = %d\n", temp_1);
                 printf("Comidas jugador 1 = %d\n\n", hit_uno);
-                printf("\nContador filas 1 = %d\n", temp_1);
-                printf("Comidas jugador 1 = %d\n\n", hit_uno);
+                printf("\nContador filas 2 = %d\n", temp_2);
+                printf("Comidas jugador 2 = %d\n\n", hit_dos);
             }
             else
                 printf("<Lugar ya ocupado>\n");
