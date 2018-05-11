@@ -20,9 +20,7 @@ void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t **hea
     int filas;
     next = (turno == 1) ? 2 : 1;
 
-    printf("check 1\n");
     if (valid_position(pente, cor_x, cor_y)) {
-        printf("check 2\n");
         board(pente, cor_x, cor_y, turno);
 
         filas = count(pente, turno);
@@ -32,21 +30,14 @@ void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t **hea
         else
             filas_2 = filas;
 
-        printf("check 3\n");
-
         hit_uno += count_hit(pente, next, turno, &first);
         if (first != NULL)
             clear_hit(&first, pente, next);
-
-        printf("check 4\n");
-        printf("sanity check: 0,0: %d\n", pente[0][0]);
 
         hit_dos += count_hit(pente, turno, next, &first);
         if (first != NULL) {
             clear_hit(&first, pente, turno);
         }
-
-        printf("check 5\n");
 
         printf("\nContador filas 1  = %d\n", filas_1);
         printf("Comidas jugador 1   = %d\n\n", hit_uno);
@@ -56,17 +47,18 @@ void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t **hea
     else
         printf("<Lugar ya ocupado>\n");
 
-    // if(*head != NULL){
-    //     cursor = (*head)->ant;
-    //     if(cursor != NULL) {
-    //         clear_board(pente);
-    //         clear_history(head);        
-    //     }
-    // }
-    // enter_data(head, hit_uno, hit_dos, filas_1, filas_2, turno);
-    // (*head)->child = create_list(pente, &(*head)->items);
-    // print_prueba((*head)->child);
-    // save_plays(*head);
+    // Segmentation fault aqui
+    if(*head != NULL){
+        cursor = (*head)->ant;
+        if(cursor != NULL) {
+            clear_board(pente);
+            clear_history(head);        
+        }
+    }
+    enter_data(head, hit_uno, hit_dos, filas_1, filas_2, turno);
+    (*head)->child = create_list(pente, &(*head)->items);
+    print_prueba((*head)->child);
+    save_plays(*head);
     contador++;
 
     print(pente);

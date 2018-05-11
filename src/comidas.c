@@ -11,7 +11,6 @@ int count_hit(int **pente, int next, int token_value, hit_t **head) {
     for (y = 0; y < PENTEMAX; y++) {
         for (x = 0; x < PENTEMAX; x++) {
             if (pente[y][x] == next) {
-                printf("count_hit check 1\n");
                 temp += get_hits(pente, x, y, token_value, next, head);
             }
         }
@@ -33,8 +32,6 @@ int get_hits(int **pente, int x, int y, int token_value, int next, hit_t **head)
     for (int i = 0; i < 8; i++) {
         actual = follow_hits(pente, token_value, next, x, y, directions[i][0], directions[i][1], 0, head);
 
-        printf("get_hits check 1\n");
-
         if (actual == 1)
             total++;
     }
@@ -53,8 +50,6 @@ int follow_hits(int **pente, int token_value, int next, int x, int y, int dx, in
         return 1;
 
     if (level == 0) {
-        // TODO: ARREGLAR ESTCA COSA
-
         if ((x - dx) < 0 || (x - dx) >= PENTEMAX || (x + dx) < 0 || (x + dx) >= PENTEMAX)
             return level;
 
