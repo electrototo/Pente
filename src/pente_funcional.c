@@ -33,6 +33,7 @@ void clear_board(int pente[MAX][MAX]);
 void board(int pente[MAX][MAX], int x, int y, int jugador);
 void print(int pente[MAX][MAX]);
 void pause();
+void print_prueba(plays_t *head);
 /*******************************/
 
 /***********JUGADAS*************/
@@ -138,7 +139,7 @@ void coordinates(int pente[MAX][MAX], game_info_t **head) {
 
             printf("\nContador filas 1  = %d\n", filas_1);
             printf("Comidas jugador 1   = %d\n\n", hit_uno);
-            printf("Contador filas 2    = %d\n", filas_2);
+            printf("Contador filas 2   = %d\n", filas_2);
             printf("Comidas jugador 2   = %d\n\n", hit_dos);
         }
         else
@@ -147,14 +148,14 @@ void coordinates(int pente[MAX][MAX], game_info_t **head) {
         if(*head != NULL){
             cursor = (*head)->ant;
             if(cursor != NULL) {
-                printf("hola");
-                clear_history(head);
+                clear_board(pente);
+                clear_history(head);        
             }
         }
-
         enter_data(head, hit_uno, hit_dos, filas_1, filas_2, jugador);
         (*head)->child = create_list(pente, &(*head)->items);
-
+        print_prueba((*head)->child);
+        save_plays(*head);
         contador++;
 
         print(pente);
@@ -173,8 +174,7 @@ void load_plays(int pente[MAX][MAX], game_info_t **head) {
     FILE *fd;
     char name[30];
     game_info_t *temp, *temp2;
-    plays_t *cursor;
-    temp = *head;
+    plays_t *actual_coord;
     file(name);
     fd = fopen(name, "r");
     if (fd == NULL) {
@@ -183,16 +183,23 @@ void load_plays(int pente[MAX][MAX], game_info_t **head) {
     }
     while (!feof(fd)) {
         temp = (game_info_t *)malloc(sizeof(game_info_t));
-        fread(temp, sizeof(temp), 1, fd);
-        cursor = temp->child; 
-        fread(cursor, sizeof(cursor), temp->items, fd);
-        temp->sig = *head; 
-        temp->ant = NULL; 
-        *head = temp;
-        if ((*head)->sig != NULL) {
-            temp2 = (*head)->sig;
-            temp2->ant = *head;
+        fread(temp, sizeof(game_info_t), 1, fd);
+        printf("comida 1 = %d\n", temp->hit1);
+        printf("comida 2 = %d\n", temp->hit2); 
+        printf("score 1 = %d\n", temp->score1);
+        printf("score2 = %d\n", temp->score2);
+        printf("Items = %d\n", temp->items);
+        printf("turno = %d\n", temp->turn);
+        //fread(cursor, sizeof(cursor), temp->items, fd);
+        for (int i = 0; i < temp->items; i++) {
+            actual_coord = (plays_t *) malloc(sizeof(plays_t));
+            fread(actual_coord, sizeof(plays_t), 1, fd);
+            printf("\tX = %d Y = %d\n", actual_coord->coor_x, actual_coord->coor_y);
+            printf("\tJugador %d\n", actual_coord->token_value);
         }
+        printf("fin\n");
+        //temp->sig = *head; 
+        //temp->ant = NULL;
     }
     fclose(fd);
     printf("\n<file loaded>\n");
@@ -210,9 +217,12 @@ void save_plays(game_info_t *head) {
     while (temp != NULL)
     {
         fwrite(temp, sizeof(temp), 1, fd);
+        printf("temp items = %d\n", temp->items);
+        printf("temp turn = %d\n", temp->turn);
         cursor = temp->child; 
         while(cursor != NULL){
             fwrite(cursor, sizeof(cursor), 1, fd);
+            printf("cursor jugador = %d\n", cursor->token_value);
             cursor = cursor->sig; 
         }
         temp = temp->sig;
@@ -360,7 +370,6 @@ int follow_hits(int pente[MAX][MAX], int token_value, int next, int x, int y, in
     if (level == 0) {
         if ((pente[y - dy][x - dx] == token_value) && (pente[y + dy][x + dx] == next) && (pente[y + (dy + dy)][x + (dx + dx)] == token_value)) {
             enter_hit(head, y, x, pente);
-            printf("Llegando al nivel %d, pente[%d][%d]\n", level, y, x);
             return level + 1;
         }
         else
@@ -419,7 +428,7 @@ void erase_game(game_info_t **head)  {
         temp = *head;
     }
 }
-//
+
 //funcion limpia lista de game
 void erase_plays(plays_t **head)  {
     plays_t *temp;
@@ -444,12 +453,12 @@ void redo(game_info_t **head) {
 void clear_history(game_info_t **head) {
     game_info_t *cursor, *temp; 
     cursor = (*head)->ant; 
-    /*while(cursor != NULL){
+    while(cursor != NULL){
         temp = cursor->ant;
         free(cursor); 
         cursor = temp; 
     }
-    (*head)->ant = NULL; */
+    (*head)->ant = NULL; 
 }
 
 //Impresion del tablero
@@ -485,4 +494,13 @@ void pause() {
     printf("\n\n\t<Pulsee ENTER para continuar...>\n");
     while (getchar() != '\n');
     system("clear");
+}
+
+void print_prueba(plays_t *head){
+    while (head != NULL) {
+        printf("Nodo %p\n", head);
+        printf("  sig: %p\n", head->sig);
+        printf("X = %d, Y = %d\n", head->coor_x, head->coor_y);
+        head = head->sig;
+    }       
 }
