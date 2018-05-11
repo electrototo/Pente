@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
 #define MAX 10
 #define VAL1 1
 #define VAL2 2
+
+#define valid_range(x, y) (!(x < 0 || x >= MAX || y < 0 || y >= MAX))
 
 typedef struct hit_t {
     int coordenada_y, coordenada_x;
@@ -51,7 +54,7 @@ int follow(int pente[MAX][MAX], int token_value, int x, int y, int dx, int dy, i
 /*******************************/
 
 /***********COMIDAS*************/
-int count_hit(int pente[MAX][MAX], int contador, hit_t **head);
+int count_hit(int pente[MAX][MAX], int next, int token_value, hit_t **head);
 int get_hits(int pente[MAX][MAX], int x, int y, int token_value, int next, hit_t **head);
 int follow_hits(int pente[MAX][MAX], int token_value, int next, int x, int y, int dx, int dy, int level, hit_t **head);
 void enter_hit(hit_t **head, int y, int x, int pente[MAX][MAX]);
@@ -63,6 +66,9 @@ void erase_hits(hit_t **head);
 void erase_game(game_info_t **head);
 void erase_plays(plays_t **head);
 /*******************************/
+
+// validez
+int valid_position(int pente[MAX][MAX], int x, int y);
 
 int main() {
     Pente();
@@ -85,85 +91,82 @@ void Pente() {
 }
 
 void clear_board(int pente[MAX][MAX]) {
-    int i, j;
-
-    //Inicializar matriz en ceros
-    for (i = 0; i < MAX; i++)
-        for (j = 0; j < MAX; j++)
-            pente[i][j] = 0;
+    memset(pente, 0, sizeof(int) * MAX * MAX);
 }
 
 void coordinates(int pente[MAX][MAX], game_info_t **head) {
     hit_t *first = NULL; //inicializar lista de hits
     game_info_t *cursor; 
-    int cor_x, cor_y, jugador, contador = 1, temp_1 = 0, temp_2 = 0, hit = 0;
+    int cor_x, cor_y, jugador, contador = 1, filas_1 = 0, filas_2 = 0, hit = 0;
     int hit_uno = 0, hit_dos = 0, next;
+
+    int filas;
+
+    print(pente);
+
     do {
         next = (contador % 2) + 1;
         jugador = (contador % 2 == 0) ? VAL2 : VAL1;
 
-        do {
-            print(pente);
-            printf("\nTURNO Jugador %d\n", jugador);
-            printf("Coordenada x: ");
-            scanf("%d", &cor_x);
-            printf("Coordenada y: ");
-            scanf("%d", &cor_y);
+        printf("\nTURNO Jugador %d\n", jugador);
+        printf("Coordenada x: ");
+        scanf("%d", &cor_x);
+        printf("Coordenada y: ");
+        scanf("%d", &cor_y);
 
-            if (cor_x < 0 || cor_x >= MAX || cor_y < 0 || cor_y >= MAX)
-                printf("<Coordenada fuera de rango\n");
+        if (!valid_range(cor_x, cor_y))
+            printf("<Coordenada fuera de rango\n");
 
-            if (pente[cor_y][cor_x] == 0 && pente[cor_y][cor_x] != jugador) {
-                board(pente, cor_x, cor_y, jugador); //Marcar tablero
-                if (jugador == VAL1) {
-                    temp_1 = count(pente, VAL1);
-                    hit = count_hit(pente, contador, &first);
-                    if (first != NULL) {
-                        hit_uno = hit_uno + hit;
-                        clear_hit(&first, pente, VAL2);
-                    }
-                    hit = count_hit(pente, contador + 1, &first);
-                    if (first != NULL) {
-                        hit_dos = hit_dos + hit;
-                        clear_hit(&first, pente, VAL1);
-                    }
-                }
-                if (jugador == VAL2) {
-                    temp_2 = count(pente, VAL2);
-                    hit = count_hit(pente, contador, &first);
-                    if (first != NULL) {
-                        hit_dos = hit_dos + hit;
-                        clear_hit(&first, pente, VAL1);
-                    }
-                    hit = count_hit(pente, contador + 1, &first);
-                    if (first != NULL) {
-                        hit_uno = hit_uno + hit;
-                        clear_hit(&first, pente, VAL2);
-                    }
-                }
-                printf("\nContador filas 1 = %d\n", temp_1);
-                printf("Comidas jugador 1 = %d\n\n", hit_uno);
-                printf("Contador filas 2 = %d\n", temp_2);
-                printf("Comidas jugador 2 = %d\n\n", hit_dos);
-            }
+        else if (valid_position(pente, cor_x, cor_y)) {
+            board(pente, cor_x, cor_y, jugador);
+
+            filas = count(pente, jugador);
+            printf("contar filas\n");
+
+            if (jugador == VAL1)
+                filas_1 = filas;
             else
-                printf("<Lugar ya ocupado>\n");
-            if(*head != NULL){
-                cursor = (*head)->ant;
-                if(cursor != NULL) {
-                    printf("hola");
-                    clear_history(head);
-                }
+                filas_2 = filas;
+
+            hit_uno += count_hit(pente, next, jugador, &first);
+            if (first != NULL)
+                clear_hit(&first, pente, next);
+
+            hit_dos += count_hit(pente, jugador, next, &first);
+            if (first != NULL)
+                clear_hit(&first, pente, jugador);
+
+            printf("\nContador filas 1  = %d\n", filas_1);
+            printf("Comidas jugador 1   = %d\n\n", hit_uno);
+            printf("Contador filas 2    = %d\n", filas_2);
+            printf("Comidas jugador 2   = %d\n\n", hit_dos);
+        }
+        else
+            printf("<Lugar ya ocupado>\n");
+
+        if(*head != NULL){
+            cursor = (*head)->ant;
+            if(cursor != NULL) {
+                printf("hola");
+                clear_history(head);
             }
-            enter_data(head, hit_uno, hit_dos, temp_1, temp_2, jugador);
-            (*head)->child = create_list(pente, &(*head)->items);
-        } while ((pente[cor_y][cor_x] != jugador && pente[cor_y][cor_x] == next)
-        || (cor_x < 0 || cor_x >= MAX || cor_y < 0 || cor_y >= MAX));
+        }
+
+        enter_data(head, hit_uno, hit_dos, filas_1, filas_2, jugador);
+        (*head)->child = create_list(pente, &(*head)->items);
+
         contador++;
-    } while ((temp_1 != 1 && temp_1 != -1) && (temp_2 != 5 && temp_2 != -1) && contador < (MAX*MAX));
+
+        print(pente);
+    } while ((filas_1 != 1 && filas_1 != -1) && (filas_2 != 5 && filas_2 != -1) && contador < (MAX*MAX));
+
     save_plays(*head);
     erase_hits(&first);
     erase_game(head);
+}
+
+int valid_position(int pente[MAX][MAX], int x, int y) {
+    return valid_range(x, y) && pente[y][x] != VAL1 && pente[y][x] != VAL2;
 }
 
 void load_plays(int pente[MAX][MAX], game_info_t **head) {
@@ -276,7 +279,7 @@ int count(int pente[MAX][MAX], int jugador) {
 }
 
 int follow(int pente[MAX][MAX], int token_value, int x, int y, int dx, int dy, int level) {
-    if (x < 0 || x >= MAX || y < 0 || y >= MAX)
+    if (!valid_range(x, y))
         return level;
 
     if (pente[y][x] != token_value || level == 5)
@@ -301,7 +304,6 @@ int get_moves(int pente[MAX][MAX], int x, int y, int jugador) {
     };
 
     for (int i = 0; i < 4; i++) {
-        // peek ahead este
         actual = follow(pente, jugador, x, y, directions[i][0], directions[i][1], 0);
 
         if (actual == 4)
@@ -314,11 +316,8 @@ int get_moves(int pente[MAX][MAX], int x, int y, int jugador) {
     return total;
 }
 
-int count_hit(int pente[MAX][MAX], int contador, hit_t **head) {
-    int temp = 0, x, y, token_value, next;
-
-    next = (contador % 2) + 1;
-    token_value = (contador % 2 == 0) ? VAL2 : VAL1;
+int count_hit(int pente[MAX][MAX], int next, int token_value, hit_t **head) {
+    int temp = 0, x, y;
 
     for (y = 0; y < MAX; y++)
         for (x = 0; x < MAX; x++)
