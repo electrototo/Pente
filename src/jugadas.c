@@ -1,77 +1,80 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <gtk/gtk.h>
+
 #include "pente_types.h" 
 #include "jugadas.h" 
+#include "filas.h" 
+#include "comidas.h" 
+#include "general.h" 
 
 
-void coordinates(int pente[MAX][MAX], game_info_t **head) {
+void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t **head) {
     hit_t *first = NULL; //inicializar lista de hits
     game_info_t *cursor; 
-    int cor_x, cor_y, jugador, contador = 1, filas_1 = 0, filas_2 = 0, hit = 0;
+    int contador = 1, filas_1 = 0, filas_2 = 0, hit = 0;
     int hit_uno = 0, hit_dos = 0, next;
 
     int filas;
+    next = (turno == 1) ? 2 : 1;
+
+    printf("check 1\n");
+    if (valid_position(pente, cor_x, cor_y)) {
+        printf("check 2\n");
+        board(pente, cor_x, cor_y, turno);
+
+        filas = count(pente, turno);
+
+        if (turno == VAL1)
+            filas_1 = filas;
+        else
+            filas_2 = filas;
+
+        printf("check 3\n");
+
+        hit_uno += count_hit(pente, next, turno, &first);
+        if (first != NULL)
+            clear_hit(&first, pente, next);
+
+        printf("check 4\n");
+        printf("sanity check: 0,0: %d\n", pente[0][0]);
+
+        hit_dos += count_hit(pente, turno, next, &first);
+        if (first != NULL) {
+            clear_hit(&first, pente, turno);
+        }
+
+        printf("check 5\n");
+
+        printf("\nContador filas 1  = %d\n", filas_1);
+        printf("Comidas jugador 1   = %d\n\n", hit_uno);
+        printf("Contador filas 2   = %d\n", filas_2);
+        printf("Comidas jugador 2   = %d\n\n", hit_dos);
+    }
+    else
+        printf("<Lugar ya ocupado>\n");
+
+    // if(*head != NULL){
+    //     cursor = (*head)->ant;
+    //     if(cursor != NULL) {
+    //         clear_board(pente);
+    //         clear_history(head);        
+    //     }
+    // }
+    // enter_data(head, hit_uno, hit_dos, filas_1, filas_2, turno);
+    // (*head)->child = create_list(pente, &(*head)->items);
+    // print_prueba((*head)->child);
+    // save_plays(*head);
+    contador++;
 
     print(pente);
 
-    do {
-        next = (contador % 2) + 1;
-        jugador = (contador % 2 == 0) ? VAL2 : VAL1;
-
-        printf("\nTURNO Jugador %d\n", jugador);
-        printf("Coordenada x: ");
-        scanf("%d", &cor_x);
-        printf("Coordenada y: ");
-        scanf("%d", &cor_y);
-
-        if (!valid_range(cor_x, cor_y))
-            printf("<Coordenada fuera de rango\n");
-
-        else if (valid_position(pente, cor_x, cor_y)) {
-            board(pente, cor_x, cor_y, jugador);
-
-            filas = count(pente, jugador);
-            printf("contar filas\n");
-
-            if (jugador == VAL1)
-                filas_1 = filas;
-            else
-                filas_2 = filas;
-
-            hit_uno += count_hit(pente, next, jugador, &first);
-            if (first != NULL)
-                clear_hit(&first, pente, next);
-
-            hit_dos += count_hit(pente, jugador, next, &first);
-            if (first != NULL)
-                clear_hit(&first, pente, jugador);
-
-            printf("\nContador filas 1  = %d\n", filas_1);
-            printf("Comidas jugador 1   = %d\n\n", hit_uno);
-            printf("Contador filas 2   = %d\n", filas_2);
-            printf("Comidas jugador 2   = %d\n\n", hit_dos);
-        }
-        else
-            printf("<Lugar ya ocupado>\n");
-
-        if(*head != NULL){
-            cursor = (*head)->ant;
-            if(cursor != NULL) {
-                clear_board(pente);
-                clear_history(head);        
-            }
-        }
-        enter_data(head, hit_uno, hit_dos, filas_1, filas_2, jugador);
-        (*head)->child = create_list(pente, &(*head)->items);
-        print_prueba((*head)->child);
-        save_plays(*head);
-        contador++;
-
-        print(pente);
-    } while ((filas_1 != 1 && filas_1 != -1) && (filas_2 != 5 && filas_2 != -1) && contador < (MAX*MAX));
-
-    save_plays(*head);
-    erase_hits(&first);
-    erase_game(head);
+    //acomodar
+    // save_plays(*head);
+    // erase_hits(&first);
+    // erase_game(head);
 }
 
 void file(char name[30]) {
@@ -83,7 +86,7 @@ void file(char name[30]) {
     strtok(name, "\n");
 }
 
-void load_plays(int pente[MAX][MAX], game_info_t **head) {
+void load_plays(int **pente, game_info_t **head) {
     FILE *fd;
     char name[30];
     game_info_t *temp, *temp2;
@@ -160,14 +163,14 @@ void enter_data(game_info_t **head, int comida1, int comida2, int contador1, int
     }
 }
 
-plays_t *create_list(int pente[MAX][MAX], int *total) {
+plays_t *create_list(int **pente, int *total) {
     plays_t *head = NULL;
     plays_t *temp;
     int i, j;
     *total = 0;
 
-    for (i = 0; i < MAX; i++) {
-        for (j = 0; j < MAX; j++) {
+    for (i = 0; i < PENTEMAX; i++) {
+        for (j = 0; j < PENTEMAX; j++) {
             if (pente[i][j] != 0) {
                 temp = (plays_t *)malloc(sizeof(plays_t));
                 temp->coor_x = j;
@@ -181,14 +184,6 @@ plays_t *create_list(int pente[MAX][MAX], int *total) {
         }
     }
     return head;
-}
-
-void undo(game_info_t **head) {
-    *head = (*head)->sig;
-}
-
-void redo(game_info_t **head) {
-    *head = (*head)->ant;
 }
 
 void clear_history(game_info_t **head) {

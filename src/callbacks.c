@@ -10,6 +10,11 @@
 #include "pente_types.h" 
 #include "windows.h" 
 
+#include "general.h"
+#include "jugadas.h"
+
+// funcional
+
 gboolean image_press_callback(GtkWidget *event_box, GdkEventButton *event, gpointer data) {
     image_data_t *img_data = (image_data_t *) data;
     game_info_t *game_data = (game_info_t *) img_data->game_info;
@@ -19,7 +24,11 @@ gboolean image_press_callback(GtkWidget *event_box, GdkEventButton *event, gpoin
     printf("Click at: %d, %d\n", img_data->x, img_data->y);
 
     printf("Player 1 points: %d, Player 2 points: %d\n",
-        game_data->player1_p, game_data->player2_p);
+        game_data->score1, game_data->score2);
+
+    print(game_data->pente_board);
+
+    coordinates(game_data->pente_board, img_data->x, img_data->y, game_data->turn, game_data->head);
 
     if (game_data->turn == 1) {
         new_image = gdk_pixbuf_new_from_file("imagenes/blue_token.jpg", NULL);

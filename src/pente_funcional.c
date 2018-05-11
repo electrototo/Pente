@@ -2,11 +2,10 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAX 10
 #define VAL1 1
 #define VAL2 2
 
-#define valid_range(x, y) (!(x < 0 || x >= MAX || y < 0 || y >= MAX))
+#define valid_range(x, y) (!(x < 0 || x >= PENTEMAX || y < 0 || y >= PENTEMAX))
 
 typedef struct hit_t {
     int coordenada_y, coordenada_x;
@@ -29,37 +28,37 @@ typedef struct plays_t {
 
 /***********GENERAL*************/
 void Pente();
-void clear_board(int pente[MAX][MAX]);
-void board(int pente[MAX][MAX], int x, int y, int jugador);
-void print(int pente[MAX][MAX]);
+void clear_board(int pente[PENTEMAX][PENTEMAX]);
+void board(int pente[PENTEMAX][PENTEMAX], int x, int y, int jugador);
+void print(int pente[PENTEMAX][PENTEMAX]);
 void pause();
 void print_prueba(plays_t *head);
 /*******************************/
 
 /***********JUGADAS*************/
-void coordinates(int pente[MAX][MAX], game_info_t **head);
+void coordinates(int pente[PENTEMAX][PENTEMAX], game_info_t **head);
 void file(char name[30]);
-void load_plays(int pente[MAX][MAX], game_info_t **head);
+void load_plays(int pente[PENTEMAX][PENTEMAX], game_info_t **head);
 void save_plays(game_info_t *head);
 void enter_data(game_info_t **head, int comida1, int comida2, int contador1, int contador2, int jugador);
-plays_t *create_list(int pente[MAX][MAX], int *total);
+plays_t *create_list(int pente[PENTEMAX][PENTEMAX], int *total);
 void undo(game_info_t **head);
 void redo(game_info_t **head);
 void clear_history(game_info_t **head);
 /*******************************/
 
 /************FILAS*************/
-int count(int pente[MAX][MAX], int jugador);
-int get_moves(int pente[MAX][MAX], int x, int y, int jugador);
-int follow(int pente[MAX][MAX], int token_value, int x, int y, int dx, int dy, int level);
+int count(int pente[PENTEMAX][PENTEMAX], int jugador);
+int get_moves(int pente[PENTEMAX][PENTEMAX], int x, int y, int jugador);
+int follow(int pente[PENTEMAX][PENTEMAX], int token_value, int x, int y, int dx, int dy, int level);
 /*******************************/
 
 /***********COMIDAS*************/
-int count_hit(int pente[MAX][MAX], int next, int token_value, hit_t **head);
-int get_hits(int pente[MAX][MAX], int x, int y, int token_value, int next, hit_t **head);
-int follow_hits(int pente[MAX][MAX], int token_value, int next, int x, int y, int dx, int dy, int level, hit_t **head);
-void enter_hit(hit_t **head, int y, int x, int pente[MAX][MAX]);
-void clear_hit(hit_t **head, int pente[MAX][MAX], int jugador);
+int count_hit(int pente[PENTEMAX][PENTEMAX], int next, int token_value, hit_t **head);
+int get_hits(int pente[PENTEMAX][PENTEMAX], int x, int y, int token_value, int next, hit_t **head);
+int follow_hits(int pente[PENTEMAX][PENTEMAX], int token_value, int next, int x, int y, int dx, int dy, int level, hit_t **head);
+void enter_hit(hit_t **head, int y, int x, int pente[PENTEMAX][PENTEMAX]);
+void clear_hit(hit_t **head, int pente[PENTEMAX][PENTEMAX], int jugador);
 /*******************************/
 
 /***********CLEAR***************/
@@ -69,7 +68,7 @@ void erase_plays(plays_t **head);
 /*******************************/
 
 // validez
-int valid_position(int pente[MAX][MAX], int x, int y);
+int valid_position(int pente[PENTEMAX][PENTEMAX], int x, int y);
 
 int main() {
     Pente();
@@ -78,7 +77,7 @@ int main() {
 }
 
 void Pente() {
-    int pente[MAX][MAX];
+    int pente[PENTEMAX][PENTEMAX];
     int i;
     game_info_t *head = NULL;
 
@@ -91,11 +90,11 @@ void Pente() {
     coordinates(pente, &head); //funcion encargada de la parte funcional del juego
 }
 
-void clear_board(int pente[MAX][MAX]) {
-    memset(pente, 0, sizeof(int) * MAX * MAX);
+void clear_board(int pente[PENTEMAX][PENTEMAX]) {
+    memset(pente, 0, sizeof(int) * PENTEMAX * PENTEMAX);
 }
 
-void coordinates(int pente[MAX][MAX], game_info_t **head) {
+void coordinates(int pente[PENTEMAX][PENTEMAX], game_info_t **head) {
     hit_t *first = NULL; //inicializar lista de hits
     game_info_t *cursor; 
     int cor_x, cor_y, jugador, contador = 1, filas_1 = 0, filas_2 = 0, hit = 0;
@@ -159,18 +158,18 @@ void coordinates(int pente[MAX][MAX], game_info_t **head) {
         contador++;
 
         print(pente);
-    } while ((filas_1 != 1 && filas_1 != -1) && (filas_2 != 5 && filas_2 != -1) && contador < (MAX*MAX));
+    } while ((filas_1 != 1 && filas_1 != -1) && (filas_2 != 5 && filas_2 != -1) && contador < (PENTEMAX*PENTEMAX));
 
     save_plays(*head);
     erase_hits(&first);
     erase_game(head);
 }
 
-int valid_position(int pente[MAX][MAX], int x, int y) {
+int valid_position(int pente[PENTEMAX][PENTEMAX], int x, int y) {
     return valid_range(x, y) && pente[y][x] != VAL1 && pente[y][x] != VAL2;
 }
 
-void load_plays(int pente[MAX][MAX], game_info_t **head) {
+void load_plays(int pente[PENTEMAX][PENTEMAX], game_info_t **head) {
     FILE *fd;
     char name[30];
     game_info_t *temp, *temp2;
@@ -230,7 +229,7 @@ void save_plays(game_info_t *head) {
     fclose(fd);
 }
 
-void board(int pente[MAX][MAX], int x, int y, int jugador) {
+void board(int pente[PENTEMAX][PENTEMAX], int x, int y, int jugador) {
     pente[y][x] = jugador;
 }
 
@@ -252,14 +251,14 @@ void enter_data(game_info_t **head, int comida1, int comida2, int contador1, int
     }
 }
 
-plays_t *create_list(int pente[MAX][MAX], int *total) {
+plays_t *create_list(int pente[PENTEMAX][PENTEMAX], int *total) {
     plays_t *head = NULL;
     plays_t *temp;
     int i, j;
     *total = 0;
 
-    for (i = 0; i < MAX; i++) {
-        for (j = 0; j < MAX; j++) {
+    for (i = 0; i < PENTEMAX; i++) {
+        for (j = 0; j < PENTEMAX; j++) {
             if (pente[i][j] != 0) {
                 temp = (plays_t *)malloc(sizeof(plays_t));
                 temp->coor_x = j;
@@ -276,10 +275,10 @@ plays_t *create_list(int pente[MAX][MAX], int *total) {
 }
 
 //get_moves regresa 1 para una fila de 4, 0 si no hay filas y -1 para una fila de 5
-int count(int pente[MAX][MAX], int jugador) {
+int count(int pente[PENTEMAX][PENTEMAX], int jugador) {
     int x, y, temp = 0;
-    for (y = 0; y < MAX; y++)
-        for (x = 0; x < MAX; x++)
+    for (y = 0; y < PENTEMAX; y++)
+        for (x = 0; x < PENTEMAX; x++)
             if ((get_moves(pente, x, y, jugador)) == -1)
                 return -1;
             else
@@ -288,7 +287,7 @@ int count(int pente[MAX][MAX], int jugador) {
     return temp;
 }
 
-int follow(int pente[MAX][MAX], int token_value, int x, int y, int dx, int dy, int level) {
+int follow(int pente[PENTEMAX][PENTEMAX], int token_value, int x, int y, int dx, int dy, int level) {
     if (!valid_range(x, y))
         return level;
 
@@ -300,7 +299,7 @@ int follow(int pente[MAX][MAX], int token_value, int x, int y, int dx, int dy, i
     return level;
 }
 
-int get_moves(int pente[MAX][MAX], int x, int y, int jugador) {
+int get_moves(int pente[PENTEMAX][PENTEMAX], int x, int y, int jugador) {
     int total = 0, actual, token_value;
 
     token_value = pente[y][x];
@@ -326,18 +325,18 @@ int get_moves(int pente[MAX][MAX], int x, int y, int jugador) {
     return total;
 }
 
-int count_hit(int pente[MAX][MAX], int next, int token_value, hit_t **head) {
+int count_hit(int pente[PENTEMAX][PENTEMAX], int next, int token_value, hit_t **head) {
     int temp = 0, x, y;
 
-    for (y = 0; y < MAX; y++)
-        for (x = 0; x < MAX; x++)
+    for (y = 0; y < PENTEMAX; y++)
+        for (x = 0; x < PENTEMAX; x++)
             if (pente[y][x] == next)
                 temp += get_hits(pente, x, y, token_value, next, head);
 
     return temp;
 }
 
-int get_hits(int pente[MAX][MAX], int x, int y, int token_value, int next, hit_t **head) {
+int get_hits(int pente[PENTEMAX][PENTEMAX], int x, int y, int token_value, int next, hit_t **head) {
     int total = 0, actual;
 
     int directions[8][2] = {
@@ -357,8 +356,8 @@ int get_hits(int pente[MAX][MAX], int x, int y, int token_value, int next, hit_t
     return total;
 }
 
-int follow_hits(int pente[MAX][MAX], int token_value, int next, int x, int y, int dx, int dy, int level, hit_t **head) {
-    if (x < 0 || x >= MAX || y < 0 || y >= MAX) //checa limites de la matriz
+int follow_hits(int pente[PENTEMAX][PENTEMAX], int token_value, int next, int x, int y, int dx, int dy, int level, hit_t **head) {
+    if (x < 0 || x >= PENTEMAX || y < 0 || y >= PENTEMAX) //checa limites de la matriz
         return level;
 
     if (pente[y][x] != next) //si la coordenada es distinta a next_token_value se sale
@@ -380,7 +379,7 @@ int follow_hits(int pente[MAX][MAX], int token_value, int next, int x, int y, in
     return level;
 }
 
-void enter_hit(hit_t **head, int y, int x, int pente[MAX][MAX]) {
+void enter_hit(hit_t **head, int y, int x, int pente[PENTEMAX][PENTEMAX]) {
     hit_t *temp;
 
     temp = (hit_t *) malloc(sizeof(hit_t));
@@ -391,7 +390,7 @@ void enter_hit(hit_t **head, int y, int x, int pente[MAX][MAX]) {
 }
 
 //borrar coordenada de la matriz
-void clear_hit(hit_t **head, int pente[MAX][MAX], int jugador) { 
+void clear_hit(hit_t **head, int pente[PENTEMAX][PENTEMAX], int jugador) { 
     hit_t *temp;
     temp = *head;
 
@@ -462,18 +461,18 @@ void clear_history(game_info_t **head) {
 }
 
 //Impresion del tablero
-void print(int pente[MAX][MAX])  {
+void print(int pente[PENTEMAX][PENTEMAX])  {
     int i, j;
     printf("    ");
-    for (i = 0; i < MAX; i++)
+    for (i = 0; i < PENTEMAX; i++)
     {
         printf(" %d ", i);
     }
     printf("\n");
-    for (i = 0; i < MAX; i++)
+    for (i = 0; i < PENTEMAX; i++)
     {
         printf(" %d |", i);
-        for (j = 0; j < MAX; j++)
+        for (j = 0; j < PENTEMAX; j++)
         {
             printf(" %d|", pente[i][j]);
         }

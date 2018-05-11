@@ -3,10 +3,10 @@
 #include "pente_types.h"
 #include "filas.h"
 
-int count(int pente[MAX][MAX], int jugador) {
+int count(int **pente, int jugador) {
     int x, y, temp = 0;
-    for (y = 0; y < MAX; y++)
-        for (x = 0; x < MAX; x++)
+    for (y = 0; y < PENTEMAX; y++)
+        for (x = 0; x < PENTEMAX; x++)
             if ((get_moves(pente, x, y, jugador)) == -1)
                 return -1;
             else
@@ -15,7 +15,7 @@ int count(int pente[MAX][MAX], int jugador) {
     return temp;
 }
 
-int follow(int pente[MAX][MAX], int token_value, int x, int y, int dx, int dy, int level) {
+int follow(int **pente, int token_value, int x, int y, int dx, int dy, int level) {
     if (!valid_range(x, y))
         return level;
 
@@ -28,7 +28,7 @@ int follow(int pente[MAX][MAX], int token_value, int x, int y, int dx, int dy, i
 }
 
 //get_moves regresa 1 para una fila de 4, 0 si no hay filas y -1 para una fila de 5
-int get_moves(int pente[MAX][MAX], int x, int y, int jugador) {
+int get_moves(int **pente, int x, int y, int jugador) {
     int total = 0, actual, token_value;
 
     token_value = pente[y][x];

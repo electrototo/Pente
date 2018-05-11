@@ -1,54 +1,40 @@
 #include <stdio.h>
+#include <string.h>
+
 #include "pente_types.h"
 #include "general.h"
-#define MAX 20
+#include "jugadas.h"
+#include "filas.h"
 
+void clear_board(int **pente) {
+    // memset(pente, 0, sizeof(int) * PENTEMAX * PENTEMAX);
 
-void Pente() {
-    int pente[MAX][MAX];
-    int i;
-    game_info_t *head = NULL;
-
-    clear_board(pente);
-
-    printf("\n¿Desea cargar algun juego? [Si = 0/ No = 1]\n> "); //Igual a resume playing
-    scanf("%d", &i);
-    if (i == 0)
-        load_plays(pente, &head);
-    coordinates(pente, &head); //funcion encargada de la parte funcional del juego
+    for (int y = 0; y < PENTEMAX; y++)
+        for (int x = 0; x < PENTEMAX; x++)
+            pente[y][x] = 0;
 }
 
-void clear_board(int pente[MAX][MAX]) {
-    memset(pente, 0, sizeof(int) * MAX * MAX);
-}
-
-void board(int pente[MAX][MAX], int x, int y, int jugador) {
+void board(int **pente, int x, int y, int jugador) {
     pente[y][x] = jugador;
 }
 
-void print(int pente[MAX][MAX])  {
+void print(int **pente)  {
     int i, j;
     printf("    ");
-    for (i = 0; i < MAX; i++)
+    for (i = 0; i < PENTEMAX; i++)
     {
-        printf(" %d ", i);
+        printf(" %2d", i);
     }
     printf("\n");
-    for (i = 0; i < MAX; i++)
+    for (i = 0; i < PENTEMAX; i++)
     {
-        printf(" %d |", i);
-        for (j = 0; j < MAX; j++)
+        printf(" %2d |", i);
+        for (j = 0; j < PENTEMAX; j++)
         {
             printf(" %d|", pente[i][j]);
         }
         printf("\n");
     }
-}
-
-void pause() {
-    printf("\n\n\t<Pulsee ENTER para continuar...>\n");
-    while (getchar() != '\n');
-    system("clear");
 }
 
 void print_prueba(plays_t *head){
@@ -60,6 +46,6 @@ void print_prueba(plays_t *head){
     }       
 }
 
-int valid_position(int pente[MAX][MAX], int x, int y) {
+int valid_position(int **pente, int x, int y) {
     return valid_range(x, y) && pente[y][x] != VAL1 && pente[y][x] != VAL2;
 }

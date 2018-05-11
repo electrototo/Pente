@@ -5,12 +5,15 @@
 */
 
 #include <gtk/gtk.h>
+#include <stdlib.h>
 
 #include "menus.h" 
 #include "windows.h" 
 
 #include "callbacks.h" 
 #include "pente_types.h" 
+
+#include "general.h" 
 
 GtkWidget *create_label(char *str);
 game_info_t *game_init();
@@ -140,13 +143,28 @@ GtkWidget *create_label(char *str) {
 }
 
 game_info_t *game_init() {
+    int **pente = (int **) malloc(sizeof(int **) * PENTEMAX);
+
+    for (int i = 0; i < PENTEMAX; i++)
+        pente[i] = (int *) malloc(sizeof(int *) * PENTEMAX);
+
+    clear_board(pente);
+    printf("dato: %d\n", pente[0][0]);
+    printf("ultimo dato: %d\n", pente[PENTEMAX - 1][PENTEMAX - 1]);
+    print(pente);
+
     game_info_t *info = g_malloc(sizeof(game_info_t));
+    game_info_t *head = NULL;
 
     info->turn = 1;
-    info->player1_p = 0;
-    info->player2_p = 0;
-    info->ccount_1 = 0;
-    info->ccount_2 = 0;
+    info->score1 = 0;
+    info->score2 = 0;
+    info->hit1 = 0;
+    info->hit2 = 0;
+
+    info->head = &head;
+
+    info->pente_board = pente;
 
     return info;
 }
