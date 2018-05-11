@@ -287,7 +287,6 @@ int follow(int pente[MAX][MAX], int token_value, int x, int y, int dx, int dy, i
     return level;
 }
 
-// TODO: se puede mejorar
 int get_moves(int pente[MAX][MAX], int x, int y, int jugador) {
     int total = 0, actual, token_value;
 
@@ -296,37 +295,21 @@ int get_moves(int pente[MAX][MAX], int x, int y, int jugador) {
     if (token_value != 1 && token_value != 2)
         return 0;
 
-    // peek ahead este
-    actual = follow(pente, jugador, x, y, 1, 0, 0);
+    int directions[4][2] = {
+        {1, 0}, {1, 1},
+        {0, 1}, {-1, 1}
+    };
 
-    if (actual == 4)
-        total++;
-    if (actual == 5)
-        return -1;
+    for (int i = 0; i < 4; i++) {
+        // peek ahead este
+        actual = follow(pente, jugador, x, y, directions[i][0], directions[i][1], 0);
 
-    // peek ahead sureste
-    actual = follow(pente, jugador, x, y, 1, 1, 0);
+        if (actual == 4)
+            total++;
 
-    if (actual == 4)
-        total++;
-    if (actual == 5)
-        return -1;
-
-    // peek ahead sur
-    actual = follow(pente, jugador, x, y, 0, 1, 0);
-
-    if (actual == 4)
-        total++;
-    if (actual == 5)
-        return -1;
-
-    // peek ahead suroeste
-    actual = follow(pente, jugador, x, y, -1, 1, 0);
-
-    if (actual == 4)
-        total++;
-    if (actual == 5)
-        return -1;
+        if (actual == 5)
+            return -1;
+    }
 
     return total;
 }
@@ -345,57 +328,22 @@ int count_hit(int pente[MAX][MAX], int contador, hit_t **head) {
     return temp;
 }
 
-// TODO: Se puede mejorar
 int get_hits(int pente[MAX][MAX], int x, int y, int token_value, int next, hit_t **head) {
     int total = 0, actual;
 
-    // peek ahead norte
-    actual = follow_hits(pente, token_value, next, x, y, 0, -1, 0, head);
+    int directions[8][2] = {
+        {0, -1}, {1, -1},
+        {1, 0}, {1, 1},
+        {0, 1}, {-1, 1},
+        {-1, 0}, {-1, -1}
+    };
 
-    if (actual == 1)
-        total++;
+    for (int i = 0; i < 8; i++) {
+        actual = follow_hits(pente, token_value, next, x, y, directions[i][0], directions[i][1], 0, head);
 
-    // peek ahead noreste
-    actual = follow_hits(pente, token_value, next, x, y, 1, -1, 0, head);
-
-    if (actual == 1)
-        total++;
-
-    // peek ahead este
-    actual = follow_hits(pente, token_value, next, x, y, 1, 0, 0, head);
-
-    if (actual == 1)
-        total++;
-
-    // peek ahead sureste
-    actual = follow_hits(pente, token_value, next, x, y, 1, 1, 0, head);
-
-    if (actual == 1)
-        total++;
-
-    // peek ahead sur
-    actual = follow_hits(pente, token_value, next, x, y, 0, 1, 0, head);
-
-    if (actual == 1)
-        total++;
-
-    // peek ahead suroeste
-    actual = follow_hits(pente, token_value, next, x, y, -1, 1, 0, head);
-
-    if (actual == 1)
-        total++;
-
-    // peek ahead oeste
-    actual = follow_hits(pente, token_value, next, x, y, -1, 0, 0, head);
-
-    if (actual == 1)
-        total++;
-
-    // peek ahead noroeste
-    actual = follow_hits(pente, token_value, next, x, y, -1, -1, 0, head);
-
-    if (actual == 1)
-        total++;
+        if (actual == 1)
+            total++;
+    }
 
     return total;
 }
