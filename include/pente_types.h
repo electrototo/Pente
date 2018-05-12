@@ -20,7 +20,7 @@ typedef struct image_data_t{
     GtkWidget *image;
     int x, y;
 
-    struct game_info_t *game_info;
+    struct total_info_t *game_info;
 } image_data_t;
 
 typedef struct menu_item_dt {
@@ -41,21 +41,24 @@ typedef struct hit_t {
     struct hit_t *sig;
 } hit_t;
 
-typedef struct game_info_t {
+typedef struct game_info_t{
+  GtkWidget *main_board;
+  GtkWidget *turn_image, *turn_label;
+  GtkWidget *points1_label, *points2_label;
+  
+  int **pente_board;
+  image_data_t ***positions;
+  struct total_info_t **head; 
+}game_info_t;
+
+typedef struct total_info_t {
     int hit1, hit2;
     int score1, score2;
     int turn, items;
 
     struct plays_t *child;
-    struct game_info_t *sig, *ant, **head;
-
-    GtkWidget *main_board;
-    GtkWidget *turn_image, *turn_label;
-    GtkWidget *points1_label, *points2_label;
-
-    int **pente_board;
-    image_data_t ***positions;
-} game_info_t;
+    struct total_info_t *sig, *ant;
+} total_info_t;
 
 typedef struct plays_t {
     int coor_y, coor_x;
