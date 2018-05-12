@@ -87,12 +87,7 @@ void clear_hit(hit_t **first, int **pente, int jugador, game_info_t *data) {
     GdkPixbuf *white_token;
     image_data_t *image_pos;
 
-    printf("check 1\n");
-    printf("score 1: %d, score 2: %d\n", data->head->score1, data->head->score2);
-    printf("check 2\n");
-
     while (temp != NULL) {
-        printf("borrando (%d, %d)\n", temp->coordenada_x, temp->coordenada_y);
         pente[temp->coordenada_y][temp->coordenada_x] = 0;
 
         white_token = gdk_pixbuf_new_from_file("imagenes/white_token.jpg", NULL);

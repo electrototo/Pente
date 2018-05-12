@@ -6,32 +6,41 @@
 #include "jugadas.h"
 #include "filas.h"
 
-void clear_board(int **pente) {
-    for (int y = 0; y < PENTEMAX; y++)
-        for (int x = 0; x < PENTEMAX; x++)
-            pente[y][x] = 0;
+void clear_board(int **pente, game_info_t *data) {
+  GdkPixbuf *white_token;
+  image_data_t *image_pos;
+  
+  white_token = gdk_pixbuf_new_from_file("imagenes/white_token.jpg", NULL);
+  
+  for (int y = 0; y < PENTEMAX; y++){
+    for (int x = 0; x < PENTEMAX; x++){
+      pente[y][x] = 0;
+      image_pos = data->positions[y][x];
+      gtk_image_set_from_pixbuf(GTK_IMAGE(image_pos->image), white_token);
+    }
+  }
 }
 
 void board(int **pente, int x, int y, int jugador) {
-    pente[y][x] = jugador;
+  pente[y][x] = jugador;
 }
 
 void print(int **pente)  {
-    int i, j;
-    printf("    ");
-    for (i = 0; i < PENTEMAX; i++)
+  int i, j;
+  printf("    ");
+  for (i = 0; i < PENTEMAX; i++)
     {
-        printf(" %2d", i);
+      printf(" %2d", i);
     }
-    printf("\n");
-    for (i = 0; i < PENTEMAX; i++)
+  printf("\n");
+  for (i = 0; i < PENTEMAX; i++)
     {
-        printf(" %2d |", i);
-        for (j = 0; j < PENTEMAX; j++)
+      printf(" %2d |", i);
+      for (j = 0; j < PENTEMAX; j++)
         {
-            printf(" %d|", pente[i][j]);
+	  printf(" %d|", pente[i][j]);
         }
-        printf("\n");
+      printf("\n");
     }
 }
 

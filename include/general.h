@@ -1,7 +1,7 @@
 #ifndef GENERALH
 #define GENERALH
 
-void clear_board(int **pente);
+void clear_board(int **pente, game_info_t *data);
 void board(int **pente, int x, int y, int jugador);
 void print(int **pente);
 void print_prueba(plays_t *head);

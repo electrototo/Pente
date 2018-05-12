@@ -67,7 +67,9 @@ void open_file(GtkWidget *widget, gpointer data) {
 } 
 
 void new_game(GtkWidget *wdiget, gpointer data) {
-    printf("New game");
+  game_info_t *game_info = (game_info_t *) data; 
+  printf("New game");
+  clear_board(game_info->pente_board, game_info);
 } 
 
 void save(GtkWidget *wdiget, gpointer data) {
@@ -83,11 +85,15 @@ void quit(GtkWidget *wdiget, gpointer data) {
 } 
 
 void undo(GtkWidget *wdiget, gpointer data) {
+    game_info_t *game_info = (game_info_t *) data; 
     printf("Undo");
+    clear_board(game_info->pente_board, game_info);
 } 
 
 void redo(GtkWidget *wdiget, gpointer data) {
+    game_info_t *game_info = (game_info_t *) data; 
     printf("Redo");
+    clear_board(game_info->pente_board, game_info);
 } 
 
 void tutorial(GtkWidget *wdiget, gpointer data) {

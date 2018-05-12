@@ -97,7 +97,9 @@ int main(int argc, char **argv) {
         }
     }
     // end pente board
+    clear_board(game_data->pente_board, game_data);
 
+    
     gtk_box_pack_start(GTK_BOX(vbox), main_container, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(main_container), sidebar_menu, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(main_container), pente_container, TRUE, TRUE, 0);
@@ -153,9 +155,6 @@ game_info_t *game_init() {
         positions[i] = (image_data_t **) malloc(sizeof(image_data_t **) * PENTEMAX);
     }
 
-    clear_board(pente);
-    print(pente);
-
     game_info_t *info = g_malloc(sizeof(game_info_t));
 
     total_info_t *head = (total_info_t *) malloc(sizeof(total_info_t));
@@ -172,5 +171,6 @@ game_info_t *game_init() {
     info->pente_board = pente;
     info->positions = positions;
 
+    
     return info;
 }
