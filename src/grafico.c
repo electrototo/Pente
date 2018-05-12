@@ -70,11 +70,11 @@ int main(int argc, char **argv) {
     gtk_container_add(GTK_CONTAINER(hbox), create_toolbar());
 
     // start pente board
-    for (int y = 0; y < 20; y++) {
+    for (int y = 0; y < PENTEMAX; y++) {
         hbox = gtk_hbox_new(TRUE, 0);
         gtk_box_pack_start(GTK_BOX(pente_container), hbox, TRUE, TRUE, 0);
 
-        for (int x = 0; x < 20; x++) {
+        for (int x = 0; x < PENTEMAX; x++) {
             token = gtk_image_new_from_file("imagenes/white_token.jpg");
 
             img_data = (image_data_t *) g_malloc(sizeof(image_data_t));
