@@ -10,29 +10,29 @@
 #include "menus.h"
 #include "pente_types.h"
 
-GtkWidget *create_menubar() {
+GtkWidget *create_menubar(gpointer data) {
     GtkWidget *menu_bar;
 
     GtkWidget *file_item, *edit_item, *help_item;
 
     menu_item_dt file_options[7] = {
-        {"Open File", open_file, NULL},
-        {"New Game", new_game, NULL},
+        {"Open File", open_file, data},
+        {"New Game", new_game, data},
         {"~~~", NULL, NULL},
-        {"Save", save, NULL},
-        {"Save as...", save_as, NULL},
+        {"Save", save, data},
+        {"Save as...", save_as, data},
         {"~~~", NULL, NULL},
-        {"Quit", quit, NULL}
+        {"Quit", quit, data}
     };
 
     menu_item_dt edit_options[2] = {
-        {"Undo", undo, NULL},
-        {"Redo", redo, NULL}
+        {"Undo", undo, data},
+        {"Redo", redo, data}
     };
 
     menu_item_dt help_options[2] = {
-        {"Pente Tutorial", tutorial, NULL},
-        {"About Us", about_us, NULL},
+        {"Pente Tutorial", tutorial, data},
+        {"About Us", about_us, data},
     };
 
     menu_bar = gtk_menu_bar_new();
@@ -52,17 +52,17 @@ GtkWidget *create_menubar() {
     return menu_bar;
 }
 
-GtkWidget *create_toolbar() {
+GtkWidget *create_toolbar(gpointer data) {
     GtkWidget *toolbar;
 
     tool_item_dt toolbar_options[7] = {
-        {"gtk-new", new_game, NULL},
-        {"gtk-open", open_file, NULL},
-        {"gtk-save", save, NULL},
-        {"gtk-save-as", save_as, NULL},
-        {"gtk-undo", undo, NULL},
-        {"gtk-redo", redo, NULL},
-        {"gtk-info", tutorial, NULL},
+        {"gtk-new", new_game, data},
+        {"gtk-open", open_file, data},
+        {"gtk-save", save, data},
+        {"gtk-save-as", save_as, data},
+        {"gtk-undo", undo, data},
+        {"gtk-redo", redo, data},
+        {"gtk-info", tutorial, data},
     };
 
     toolbar = gtk_toolbar_new();
