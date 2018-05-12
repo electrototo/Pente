@@ -68,7 +68,8 @@ void destroy(GtkWidget *widget, gpointer data) {
 
 void open_file(GtkWidget *widget, gpointer data) {
   //resume_game(data);
-  game_info_t *game_info = (game_info_t *) data; 
+  game_info_t *game_info = (game_info_t *) data;
+  clear_board(game_info->pente_board, game_info);	      	 
   load_plays(game_info); 
   
 } 

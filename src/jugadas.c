@@ -102,9 +102,10 @@ void load_plays(game_info_t *game_data) {
 	    actual_coord->sig = temp->child;
 	    temp->child = actual_coord; 
             printf("\tX = %d Y = %d\n", actual_coord->coor_x, actual_coord->coor_y);
-            printf("\tJugador %d\n", actual_coord->token_value);
+            printf("\tJugador %d\n", actual_coord->token_value); 
+	    
         }
-
+	printf("fin\n"); 
 	game_data->head = temp;
 	if (game_data->head->sig != NULL) {
 	  temp2 = game_data->head->sig;
@@ -113,6 +114,17 @@ void load_plays(game_info_t *game_data) {
     }
     fclose(fd);
     printf("\n<file loaded>\n");
+
+    temp = game_data->head;
+    while (temp != NULL && temp->sig != NULL)
+      temp = temp->sig;
+    
+    actual_coord = temp->child;
+    printf("recorriendo posiciones\n");
+    while(actual_coord != NULL) {
+      printf("%d, %d\n", actual_coord->coor_x, actual_coord->coor_y);
+      actual_coord->sig;
+    }
 }
 
 void save_plays(game_info_t *game_data) {
