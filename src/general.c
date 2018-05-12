@@ -44,11 +44,11 @@ void print(int **pente)  {
     }
 }
 
-void print_prueba(plays_t *head){
+void print_prueba(total_info_t *head){
     while (head != NULL) {
         printf("Nodo %p\n", head);
         printf("  sig: %p\n", head->sig);
-        printf("X = %d, Y = %d\n", head->coor_x, head->coor_y);
+        //printf("X = %d, Y = %d\n", head->coor_x, head->coor_y);
         head = head->sig;
     }       
 }

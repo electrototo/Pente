@@ -13,7 +13,7 @@
 
 void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t *game_data) {
     hit_t *first = NULL; //inicializar lista de hits
-    game_info_t *cursor; 
+    game_info_t *cursor;
     int contador = 1, next;
 
     int filas;
@@ -23,6 +23,7 @@ void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t *game
         board(pente, cor_x, cor_y, turno);
 
         printf("pip pop\n");
+	enter_data(&(game_data->head));
         game_data->head->score1 = count(pente, VAL2);
         game_data->head->score2 = count(pente, VAL1);
 
@@ -30,7 +31,7 @@ void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t *game
         if (first != NULL)
             clear_hit(&first, pente, next, game_data);
 
-        game_data->head += count_hit(pente, VAL2, VAL1, &first);
+        game_data->head->hit2 += count_hit(pente, VAL2, VAL1, &first);
         if (first != NULL) {
             clear_hit(&first, pente, turno, game_data);
         }
@@ -43,24 +44,21 @@ void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t *game
     else
         printf("<Lugar ya ocupado>\n");
 
-    // Segmentation fault aqui
-    //if(*head != NULL){
+    //if(game_data->head != NULL){
     //    cursor = (*head)->ant;
     //    if(cursor != NULL) {
     //        clear_board(pente);
     //        clear_history(head);        
     //    }
     //}
-    //enter_data(head, hit_uno, hit_dos, filas_1, filas_2, turno);
-    //(*head)->child = create_list(pente, &(*head)->items);
-    //print_prueba((*head)->child);
-    //save_plays(*head);
+    
+    game_data->head->child = create_list(game_data);
+    //print_prueba(game_data->head);
+    print(pente);
+    save_plays(game_data);
     contador++;
 
-    print(pente);
-
     //acomodar
-    // save_plays(*head);
     // erase_hits(&first);
     // erase_game(head);
 }
@@ -114,78 +112,73 @@ void load_plays(int **pente, game_info_t *first) {
     printf("\n<file loaded>\n");
 }
 
-void save_plays(game_info_t *first) {
+void save_plays(game_info_t *game_data) {
     FILE *fd;
     char name[30];
     total_info_t *temp;
-
-    temp = first->head;
-
     plays_t *cursor;
+    
+    temp = game_data->head;
+
     //file(name);
     fd = fopen("juego.ice", "w");
     while (temp != NULL)
     {
-        fwrite(temp, sizeof(total_info_t), 1, fd);
+        fwrite(temp, sizeof(temp), 1, fd);
         printf("temp items = %d\n", temp->items);
         printf("temp turn = %d\n", temp->turn);
         cursor = temp->child; 
         while(cursor != NULL){
-            fwrite(cursor, sizeof(plays_t), 1, fd);
+            fwrite(cursor, sizeof(cursor), 1, fd);
             printf("cursor jugador = %d\n", cursor->token_value);
             cursor = cursor->sig; 
         }
+	printf("Done\n"); 
         temp = temp->sig;
     }
     fclose(fd);
 }
 
-void enter_data(game_info_t *first, int comida1, int comida2, int contador1, int contador2, int jugador) {
+void enter_data(total_info_t **head) {
     total_info_t *temp, *temp2;
-    temp = (total_info_t *)malloc(sizeof(total_info_t));
-    temp->hit1 = comida1;
-    temp->hit2 = comida2;
-    temp->score1 = contador1;
-    temp->score2 = contador2;
-    temp->turn = jugador;
-
-    temp->sig = first->head;
-
+    temp = (total_info_t *) malloc(sizeof(total_info_t));
+    temp->hit1 = (*head)->hit1;
+    temp->hit2 = (*head)->hit2;
+    temp->turn = (*head)->turn; 
     temp->ant = NULL;
 
-    first->head = temp;
-
-    if (first->head->sig != NULL) {
-        temp2 = first->head->sig;
-        temp2->ant = first->head;
+    temp->sig = *head; 
+    *head = temp; 
+    if ((*head)->sig != NULL) {
+      temp2 = (*head)->sig;
+      temp2->ant = *head;
     }
 }
 
-plays_t *create_list(int **pente, int *total) {
-    plays_t *head = NULL;
+plays_t *create_list(game_info_t *game_data) {
+    game_data->head->child = NULL;
     plays_t *temp;
-    int i, j;
-    *total = 0;
+    int i, j, total = 0;
 
     for (i = 0; i < PENTEMAX; i++) {
         for (j = 0; j < PENTEMAX; j++) {
-            if (pente[i][j] != 0) {
+            if (game_data->pente_board[i][j] != 0) {
                 temp = (plays_t *)malloc(sizeof(plays_t));
                 temp->coor_x = j;
                 temp->coor_y = i;
-                temp->token_value = pente[i][j];
+                temp->token_value = game_data->pente_board[i][j];
 
-                temp->sig = head;
-                head = temp;
-                (*total)++;
+                temp->sig = game_data->head->child;
+                game_data->head->child = temp;
+		total++;
             }
         }
     }
-    return head;
+    game_data->head->items = total; 
+    return game_data->head->child;
 }
 
 void clear_history(game_info_t *first) {
-  //borrar plays tambien!!!
     total_info_t *cursor, *temp; 
     cursor = first->head->ant; 
 
