@@ -72,41 +72,44 @@ void file(char name[30]) {
     strtok(name, "\n");
 }
 
-void load_plays(int **pente, game_info_t *first) {
+void load_plays(game_info_t *game_data) {
     FILE *fd;
-    char name[30];
-    total_info_t *temp;
-    temp = first->head;
+    //char name[30];
+    total_info_t *temp, *temp2;
     plays_t *actual_coord;
-    file(name); 
-    fd = fopen(name, "r");
+    long size;
+    //file(name); 
+    fd = fopen("juego.ice", "r");
 
     if (fd == NULL) {
         printf("\n<nonexistent file>\n");
         return;
     }
-
-    while (!feof(fd)) {
+    fseek(fd, 0, SEEK_END);
+    size = ftell(fd);
+    fseek(fd, 0, SEEK_SET);
+    
+    while (ftell(fd) < size - 1) {
         temp = (total_info_t *)malloc(sizeof(total_info_t));
         fread(temp, sizeof(total_info_t), 1, fd);
-        printf("comida 1 = %d\n", temp->hit1);
-        printf("comida 2 = %d\n", temp->hit2); 
-        printf("score 1 = %d\n", temp->score1);
-        printf("score2 = %d\n", temp->score2);
-        printf("Items = %d\n", temp->items);
-        printf("turno = %d\n", temp->turn);
+	temp->ant = NULL;
+	temp->child = NULL;
+	temp->sig = game_data->head; 
 
-        //fread(cursor, sizeof(cursor), temp->items, fd);
         for (int i = 0; i < temp->items; i++) {
             actual_coord = (plays_t *) malloc(sizeof(plays_t));
             fread(actual_coord, sizeof(plays_t), 1, fd);
+	    actual_coord->sig = temp->child;
+	    temp->child = actual_coord; 
             printf("\tX = %d Y = %d\n", actual_coord->coor_x, actual_coord->coor_y);
             printf("\tJugador %d\n", actual_coord->token_value);
         }
 
-        printf("fin\n");
-        //temp->sig = *head; 
-        //temp->ant = NULL;
+	game_data->head = temp;
+	if (game_data->head->sig != NULL) {
+	  temp2 = game_data->head->sig;
+	  temp2->ant = game_data->head;
+	}
     }
     fclose(fd);
     printf("\n<file loaded>\n");
