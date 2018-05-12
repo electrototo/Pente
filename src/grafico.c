@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
     vbox = gtk_vbox_new(FALSE, 0);
     hbox = gtk_hbox_new(TRUE, 0);
 
-    gtk_container_add(GTK_CONTAINER(vbox), create_menubar());
+    gtk_container_add(GTK_CONTAINER(vbox), create_menubar(game_data));
 
     gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
 
@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
     turn = gtk_hbox_new(TRUE, 0);
     comidas = gtk_vbox_new(TRUE, 0);
 
-    gtk_container_add(GTK_CONTAINER(hbox), create_toolbar());
+    gtk_container_add(GTK_CONTAINER(hbox), create_toolbar(game_data));
 
     // start pente board
     for (int y = 0; y < PENTEMAX; y++) {
