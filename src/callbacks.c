@@ -170,6 +170,6 @@ void set_player_name(GtkWidget *widget, gpointer data) {
 
     gtk_label_set_text(GTK_LABEL(game_info->turn_label), game_info->player1);
 
-    gtk_widget_destroy(gtk_widget_get_parent(widget));
+    gtk_widget_destroy(gtk_widget_get_parent(gtk_widget_get_parent(widget)));
     gtk_widget_show_all(game_info->main_board);
 }
