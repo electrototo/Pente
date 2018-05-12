@@ -56,7 +56,6 @@ void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t *game
 
     //print_prueba(game_data->head);
     print(pente);
-    save_plays(game_data);
     contador++;
 
     //acomodar

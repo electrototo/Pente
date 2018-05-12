@@ -35,7 +35,7 @@ gboolean image_press_callback(GtkWidget *event_box, GdkEventButton *event, gpoin
 
             (game_data->head)->turn = 2;
 
-            gtk_label_set_text(GTK_LABEL(game_data->turn_label), "Jugador 2");
+            gtk_label_set_text(GTK_LABEL(game_data->turn_label), game_data->player2);
         }
         else {
             new_image = gdk_pixbuf_new_from_file("imagenes/red_token.jpg", NULL);
@@ -43,7 +43,7 @@ gboolean image_press_callback(GtkWidget *event_box, GdkEventButton *event, gpoin
 
             (game_data->head)->turn = 1;
 
-            gtk_label_set_text(GTK_LABEL(game_data->turn_label), "Jugador 1");
+            gtk_label_set_text(GTK_LABEL(game_data->turn_label), game_data->player1);
         }
         gtk_image_set_from_pixbuf(GTK_IMAGE(game_data->turn_image), turn_image);
         gtk_image_set_from_pixbuf(GTK_IMAGE(img_data->image), new_image);
@@ -60,6 +60,9 @@ gboolean image_press_callback(GtkWidget *event_box, GdkEventButton *event, gpoin
 }
 
 void destroy(GtkWidget *widget, gpointer data) {
+    game_info_t *game_info = (game_info_t *) data;
+
+    erase_game(game_info);
     gtk_main_quit();
 }
 
@@ -74,7 +77,10 @@ void new_game(GtkWidget *wdiget, gpointer data) {
 } 
 
 void save(GtkWidget *wdiget, gpointer data) {
-    printf("Save");
+    game_info_t *game_info = (game_info_t *) data;
+
+    print_prueba(game_info->head);
+    save_plays(game_info);
 } 
 
 void save_as(GtkWidget *wdiget, gpointer data) {

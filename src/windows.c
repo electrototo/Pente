@@ -185,7 +185,7 @@ GtkWidget *main_window_board(game_info_t *game_data) {
     // final tablero principal
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    g_signal_connect(window, "delete-event", G_CALLBACK(delete_event), NULL);
+    g_signal_connect(window, "delete-event", G_CALLBACK(delete_event), game_data);
 
     GtkWidget *token, *white;
 
