@@ -95,3 +95,33 @@ void save_as_screen(gpointer data) {
 
     gtk_widget_show_all(chooser);
 }
+
+void show_winner(gpointer data) {
+    GtkWidget *winner_window, *vbox, *hbox;
+    GtkWidget *close_button, *new_game_button, *label;
+
+    winner_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_container_set_border_width(GTK_CONTAINER(winner_window), 30);
+
+    gtk_window_set_title(GTK_WINDOW(winner_window), "WINNER!");
+
+    close_button = gtk_button_new_with_label("CLOSE");
+    new_game_button = gtk_button_new_with_label("NEW GAME");
+
+    gtk_widget_set_usize(close_button, 150, 50);
+    gtk_widget_set_usize(new_game_button, 150, 50);
+
+    label = gtk_label_new("Player 1 wins!");
+
+    vbox = gtk_vbox_new(TRUE, 0);
+    gtk_container_add(GTK_CONTAINER(winner_window), vbox);
+
+    gtk_container_add(GTK_CONTAINER(vbox), label);
+
+    hbox = gtk_hbox_new(TRUE, 50);
+    gtk_container_add(GTK_CONTAINER(hbox), close_button);
+    gtk_container_add(GTK_CONTAINER(hbox), new_game_button);
+    gtk_container_add(GTK_CONTAINER(vbox), hbox);
+
+    gtk_widget_show_all(winner_window);
+}
