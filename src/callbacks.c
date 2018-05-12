@@ -26,29 +26,31 @@ gboolean image_press_callback(GtkWidget *event_box, GdkEventButton *event, gpoin
     printf("Player 1 points: %d, Player 2 points: %d\n",
         game_data->score1, game_data->score2);
 
-    print(game_data->pente_board);
+    if (valid_position(game_data->pente_board, img_data->x, img_data->y)) {
+        print(game_data->pente_board);
 
-    coordinates(game_data->pente_board, img_data->x, img_data->y, game_data->turn, game_data->head);
 
-    if (game_data->turn == 1) {
-        new_image = gdk_pixbuf_new_from_file("imagenes/blue_token.jpg", NULL);
-        turn_image = gdk_pixbuf_new_from_file("imagenes/red_token.jpg", NULL);
+        if (game_data->turn == 1) {
+            new_image = gdk_pixbuf_new_from_file("imagenes/blue_token.jpg", NULL);
+            turn_image = gdk_pixbuf_new_from_file("imagenes/red_token.jpg", NULL);
 
-        game_data->turn = 2;
+            game_data->turn = 2;
 
-        gtk_label_set_text(GTK_LABEL(game_data->turn_label), "Jugador 2");
+            gtk_label_set_text(GTK_LABEL(game_data->turn_label), "Jugador 2");
+        }
+        else {
+            new_image = gdk_pixbuf_new_from_file("imagenes/red_token.jpg", NULL);
+            turn_image = gdk_pixbuf_new_from_file("imagenes/blue_token.jpg", NULL);
+
+            game_data->turn = 1;
+
+            gtk_label_set_text(GTK_LABEL(game_data->turn_label), "Jugador 1");
+        }
+        gtk_image_set_from_pixbuf(GTK_IMAGE(game_data->turn_image), turn_image);
+        gtk_image_set_from_pixbuf(GTK_IMAGE(img_data->image), new_image);
+
+        coordinates(game_data->pente_board, img_data->x, img_data->y, game_data->turn, game_data);
     }
-    else {
-        new_image = gdk_pixbuf_new_from_file("imagenes/red_token.jpg", NULL);
-        turn_image = gdk_pixbuf_new_from_file("imagenes/blue_token.jpg", NULL);
-
-        game_data->turn = 1;
-
-        gtk_label_set_text(GTK_LABEL(game_data->turn_label), "Jugador 1");
-    }
-
-    gtk_image_set_from_pixbuf(GTK_IMAGE(game_data->turn_image), turn_image);
-    gtk_image_set_from_pixbuf(GTK_IMAGE(img_data->image), new_image);
 }
 
 void destroy(GtkWidget *widget, gpointer data) {

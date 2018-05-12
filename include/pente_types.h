@@ -54,10 +54,7 @@ typedef struct game_info_t {
     GtkWidget *points1_label, *points2_label;
 
     int **pente_board;
-
-    // historico
-    // int score1, score2;
-    // int ccount_1, ccount_2;
+    image_data_t ***positions;
 } game_info_t;
 
 typedef struct plays_t {

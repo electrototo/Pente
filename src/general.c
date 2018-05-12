@@ -7,8 +7,6 @@
 #include "filas.h"
 
 void clear_board(int **pente) {
-    // memset(pente, 0, sizeof(int) * PENTEMAX * PENTEMAX);
-
     for (int y = 0; y < PENTEMAX; y++)
         for (int x = 0; x < PENTEMAX; x++)
             pente[y][x] = 0;

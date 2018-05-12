@@ -75,10 +75,11 @@ int main(int argc, char **argv) {
         gtk_box_pack_start(GTK_BOX(pente_container), hbox, TRUE, TRUE, 0);
 
         for (int x = 0; x < 20; x++) {
-            // button = gtk_button_new_with_label("O");
             token = gtk_image_new_from_file("imagenes/white_token.jpg");
 
             img_data = (image_data_t *) g_malloc(sizeof(image_data_t));
+
+            game_data->positions[y][x] = img_data;
 
             img_data->x = x;
             img_data->y = y;
@@ -144,9 +145,12 @@ GtkWidget *create_label(char *str) {
 
 game_info_t *game_init() {
     int **pente = (int **) malloc(sizeof(int **) * PENTEMAX);
+    image_data_t ***positions = (image_data_t ***) malloc(sizeof(image_data_t ***) * PENTEMAX);
 
-    for (int i = 0; i < PENTEMAX; i++)
+    for (int i = 0; i < PENTEMAX; i++) {
         pente[i] = (int *) malloc(sizeof(int *) * PENTEMAX);
+        positions[i] = (image_data_t **) malloc(sizeof(image_data_t **) * PENTEMAX);
+    }
 
     clear_board(pente);
     printf("dato: %d\n", pente[0][0]);
@@ -162,9 +166,10 @@ game_info_t *game_init() {
     info->hit1 = 0;
     info->hit2 = 0;
 
-    info->head = &head;
+    info->head = &info;
 
     info->pente_board = pente;
+    info->positions = positions;
 
     return info;
 }
