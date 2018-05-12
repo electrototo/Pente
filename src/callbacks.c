@@ -22,17 +22,11 @@ gboolean image_press_callback(GtkWidget *event_box, GdkEventButton *event, gpoin
     GdkPixbuf *new_image, *turn_image;
 
     printf("Click at: %d, %d\n", img_data->x, img_data->y);
-
-    printf("test turn: %d\n", (game_data->head)->turn);
-
-    /*
     printf("Player 1 points: %d, Player 2 points: %d\n",
-        (*game_data->head)->score1, (*game_data->head)->score2);
-    */
+        game_data->head->score1, game_data->head->score2);
 
     if (valid_position(game_data->pente_board, img_data->x, img_data->y)) {
         print(game_data->pente_board);
-
 
         if ((game_data->head)->turn == 1) {
             new_image = gdk_pixbuf_new_from_file("imagenes/blue_token.jpg", NULL);
@@ -54,6 +48,13 @@ gboolean image_press_callback(GtkWidget *event_box, GdkEventButton *event, gpoin
         gtk_image_set_from_pixbuf(GTK_IMAGE(img_data->image), new_image);
 
         coordinates(game_data->pente_board, img_data->x, img_data->y, (game_data->head)->turn, game_data);
+
+        if (game_data->head->score1 == 4 || game_data->head->score1 == -1 || 
+            game_data->head->score2 == 4 || game_data->head->score2 == -1 ||
+            game_data->head->hit1 == 10  || game_data->head->hit2 == 10) {
+
+            show_winner(game_data);
+        }
     }
 }
 
