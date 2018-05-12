@@ -80,15 +80,15 @@ void enter_hit(hit_t **head, int y, int x, int **pente) {
 }
 
 //borrar coordenada de la matriz
-void clear_hit(hit_t **head, int **pente, int jugador, game_info_t *data) { 
+void clear_hit(hit_t **first, int **pente, int jugador, game_info_t *data) { 
     hit_t *temp;
-    temp = *head;
+    temp = *first;
 
     GdkPixbuf *white_token;
     image_data_t *image_pos;
 
     printf("check 1\n");
-    printf("score 1: %d, score 2: %d\n", data->score1, data->score2);
+    printf("score 1: %d, score 2: %d\n", (*data->head)->score1, (*data->head)->score2);
     printf("check 2\n");
 
     while (temp != NULL) {
@@ -101,9 +101,9 @@ void clear_hit(hit_t **head, int **pente, int jugador, game_info_t *data) {
         image_pos = data->positions[temp->coordenada_y][temp->coordenada_x];
         gtk_image_set_from_pixbuf(GTK_IMAGE(image_pos->image), white_token);
 
-        *head = temp->sig;
+        *first = temp->sig;
         free(temp);
-        temp = *head;
+        temp = *first;
     }
 }
 
