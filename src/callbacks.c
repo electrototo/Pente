@@ -113,6 +113,8 @@ void gen_callback(GtkWidget *menuitem, gpointer data) {
 void new_game_callback(GtkWidget *widget, gpointer data) {
     game_info_t *info = (game_info_t *) data;
 
+    get_player_names_window(data);
+
     GtkWidget *splash_window = gtk_widget_get_parent(widget);
     splash_window = gtk_widget_get_parent(splash_window);
 

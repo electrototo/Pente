@@ -125,3 +125,38 @@ void show_winner(gpointer data) {
 
     gtk_widget_show_all(winner_window);
 }
+
+void get_player_names_window(gpointer data) {
+    GtkWidget *window, *accept, *entry;
+    GtkWidget *vbox, *hbox;
+
+    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    accept = gtk_button_new_with_label("Continue");
+
+    vbox = gtk_vbox_new(TRUE, 0);
+    gtk_container_add(GTK_CONTAINER(window), vbox);
+
+    // tabla de jugador 1
+    hbox = gtk_hbox_new(TRUE, 0);
+
+    // falta conectar al picar enter
+    entry = gtk_entry_new();
+
+    gtk_container_add(GTK_CONTAINER(hbox), gtk_label_new("Player's 1 name: "));
+    gtk_container_add(GTK_CONTAINER(hbox), entry);
+
+    gtk_container_add(GTK_CONTAINER(vbox), hbox);
+
+    // tabla de jugador 2
+    hbox = gtk_hbox_new(TRUE, 0);
+    entry = gtk_entry_new();
+
+    gtk_container_add(GTK_CONTAINER(hbox), gtk_label_new("Player's 2 name: "));
+    gtk_container_add(GTK_CONTAINER(hbox), entry);
+
+    gtk_container_add(GTK_CONTAINER(vbox), hbox);
+
+    gtk_container_add(GTK_CONTAINER(vbox), accept);
+
+    gtk_widget_show_all(window);
+}
