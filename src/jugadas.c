@@ -10,7 +10,6 @@
 #include "comidas.h" 
 #include "general.h" 
 
-
 void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t *game_data) {
     hit_t *first = NULL; //inicializar lista de hits
     game_info_t *cursor;
@@ -23,7 +22,8 @@ void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t *game
         board(pente, cor_x, cor_y, turno);
 
         printf("pip pop\n");
-	enter_data(&(game_data->head));
+        enter_data(&(game_data->head));
+
         game_data->head->score1 = count(pente, VAL2);
         game_data->head->score2 = count(pente, VAL1);
 
@@ -53,6 +53,7 @@ void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t *game
     //}
     
     game_data->head->child = create_list(game_data);
+
     //print_prueba(game_data->head);
     print(pente);
     save_plays(game_data);
@@ -122,18 +123,19 @@ void save_plays(game_info_t *game_data) {
 
     //file(name);
     fd = fopen("juego.ice", "w");
-    while (temp != NULL)
-    {
-        fwrite(temp, sizeof(temp), 1, fd);
+    while (temp != NULL) {
+        fwrite(temp, sizeof(total_info_t), 1, fd);
         printf("temp items = %d\n", temp->items);
         printf("temp turn = %d\n", temp->turn);
         cursor = temp->child; 
+
         while(cursor != NULL){
-            fwrite(cursor, sizeof(cursor), 1, fd);
+            fwrite(cursor, sizeof(plays_t), 1, fd);
             printf("cursor jugador = %d\n", cursor->token_value);
             cursor = cursor->sig; 
         }
-	printf("Done\n"); 
+
+        printf("Done\n"); 
         temp = temp->sig;
     }
     fclose(fd);
@@ -142,6 +144,7 @@ void save_plays(game_info_t *game_data) {
 void enter_data(total_info_t **head) {
     total_info_t *temp, *temp2;
     temp = (total_info_t *) malloc(sizeof(total_info_t));
+
     temp->hit1 = (*head)->hit1;
     temp->hit2 = (*head)->hit2;
     temp->turn = (*head)->turn; 
@@ -155,6 +158,7 @@ void enter_data(total_info_t **head) {
     }
 }
 
+
 plays_t *create_list(game_info_t *game_data) {
     game_data->head->child = NULL;
     plays_t *temp;
@@ -163,6 +167,7 @@ plays_t *create_list(game_info_t *game_data) {
     for (i = 0; i < PENTEMAX; i++) {
         for (j = 0; j < PENTEMAX; j++) {
             if (game_data->pente_board[i][j] != 0) {
+                printf("create_list creando\n");
                 temp = (plays_t *)malloc(sizeof(plays_t));
                 temp->coor_x = j;
                 temp->coor_y = i;
@@ -170,7 +175,7 @@ plays_t *create_list(game_info_t *game_data) {
 
                 temp->sig = game_data->head->child;
                 game_data->head->child = temp;
-		total++;
+                total++;
             }
         }
     }

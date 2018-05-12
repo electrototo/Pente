@@ -69,6 +69,8 @@ game_info_t *game_init() {
     head->score2 = 0;
     head->hit1 = 0;
     head->hit2 = 0;
+    head->child = NULL;
+    head->ant = NULL;
 
     head->sig = NULL; 
     
