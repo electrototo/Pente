@@ -20,7 +20,7 @@ typedef struct image_data_t{
     GtkWidget *image;
     int x, y;
 
-    struct total_info_t *game_info;
+    struct game_info_t *game_info;
 } image_data_t;
 
 typedef struct menu_item_dt {
@@ -48,7 +48,7 @@ typedef struct game_info_t{
   
   int **pente_board;
   image_data_t ***positions;
-  struct total_info_t **head; 
+  struct total_info_t *head; 
 }game_info_t;
 
 typedef struct total_info_t {

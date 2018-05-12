@@ -84,7 +84,8 @@ int main(int argc, char **argv) {
             img_data->x = x;
             img_data->y = y;
             img_data->image = token;
-            img_data->game_info = (*game_data->head);
+
+            img_data->game_info = game_data;
 
             event_box = gtk_event_box_new();
             gtk_container_add(GTK_CONTAINER(event_box), token);
@@ -153,25 +154,20 @@ game_info_t *game_init() {
     }
 
     clear_board(pente);
-    printf("dato: %d\n", pente[0][0]);
-    printf("ultimo dato: %d\n", pente[PENTEMAX - 1][PENTEMAX - 1]);
     print(pente);
 
     game_info_t *info = g_malloc(sizeof(game_info_t));
-    total_info_t *head = (total_info_t *)malloc(sizeof(total_info_t));
 
-    printf("Check 0\n");
-    
+    total_info_t *head = (total_info_t *) malloc(sizeof(total_info_t));
     head->turn = 1;
     head->score1 = 0;
     head->score2 = 0;
     head->hit1 = 0;
     head->hit2 = 0;
+
     head->sig = NULL; 
-    printf("Check 1\n");
     
-    info->head = &head; 
-    printf("Check 2\n"); 
+    info->head = head; 
 
     info->pente_board = pente;
     info->positions = positions;
