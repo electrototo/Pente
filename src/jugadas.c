@@ -14,35 +14,30 @@
 void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t *game_data) {
     hit_t *first = NULL; //inicializar lista de hits
     game_info_t *cursor; 
-    int contador = 1, filas_1 = 0, filas_2 = 0, hit = 0;
-    int hit_uno = 0, hit_dos = 0, next;
+    int contador = 1, next;
 
     int filas;
-    next = (turno == 1) ? 2 : 1;
-
-    printf("turno segun game_data: %d\n", game_data->turn);
-    printf("score 1: %d\n", game_data->score1);
-    printf("score 2: %d\n", game_data->score2);
+    next = (turno == VAL1) ? VAL2 : VAL1;
 
     if (valid_position(pente, cor_x, cor_y)) {
         board(pente, cor_x, cor_y, turno);
 
-        filas_1 = count(pente, VAL1);
-        filas_2 = count(pente, VAL2);
+        game_data->score1 = count(pente, VAL2);
+        game_data->score2 = count(pente, VAL1);
 
-        hit_uno += count_hit(pente, next, turno, &first);
+        game_data->hit1 += count_hit(pente, VAL1, VAL2, &first);
         if (first != NULL)
             clear_hit(&first, pente, next, game_data);
 
-        hit_dos += count_hit(pente, turno, next, &first);
+        game_data->hit2 += count_hit(pente, VAL2, VAL1, &first);
         if (first != NULL) {
             clear_hit(&first, pente, turno, game_data);
         }
 
-        printf("\nContador filas 1  = %d\n", filas_1);
-        printf("Comidas jugador 1   = %d\n\n", hit_uno);
-        printf("Contador filas 2   = %d\n", filas_2);
-        printf("Comidas jugador 2   = %d\n\n", hit_dos);
+        printf("\nContador filas 1  = %d\n", game_data->score1);
+        printf("Comidas jugador 1   = %d\n\n", game_data->hit1);
+        printf("Contador filas 2   = %d\n", game_data->score2);
+        printf("Comidas jugador 2   = %d\n\n", game_data->hit2);
     }
     else
         printf("<Lugar ya ocupado>\n");
