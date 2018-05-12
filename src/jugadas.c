@@ -11,7 +11,7 @@
 #include "general.h" 
 
 
-void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t **head) {
+void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t *game_data) {
     hit_t *first = NULL; //inicializar lista de hits
     game_info_t *cursor; 
     int contador = 1, filas_1 = 0, filas_2 = 0, hit = 0;
@@ -20,23 +20,23 @@ void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t **hea
     int filas;
     next = (turno == 1) ? 2 : 1;
 
+    printf("turno segun game_data: %d\n", game_data->turn);
+    printf("score 1: %d\n", game_data->score1);
+    printf("score 2: %d\n", game_data->score2);
+
     if (valid_position(pente, cor_x, cor_y)) {
         board(pente, cor_x, cor_y, turno);
 
-        filas = count(pente, turno);
-
-        if (turno == VAL1)
-            filas_1 = filas;
-        else
-            filas_2 = filas;
+        filas_1 = count(pente, VAL1);
+        filas_2 = count(pente, VAL2);
 
         hit_uno += count_hit(pente, next, turno, &first);
         if (first != NULL)
-            clear_hit(&first, pente, next);
+            clear_hit(&first, pente, next, game_data);
 
         hit_dos += count_hit(pente, turno, next, &first);
         if (first != NULL) {
-            clear_hit(&first, pente, turno);
+            clear_hit(&first, pente, turno, game_data);
         }
 
         printf("\nContador filas 1  = %d\n", filas_1);
@@ -48,17 +48,17 @@ void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t **hea
         printf("<Lugar ya ocupado>\n");
 
     // Segmentation fault aqui
-    if(*head != NULL){
-        cursor = (*head)->ant;
-        if(cursor != NULL) {
-            clear_board(pente);
-            clear_history(head);        
-        }
-    }
-    enter_data(head, hit_uno, hit_dos, filas_1, filas_2, turno);
-    (*head)->child = create_list(pente, &(*head)->items);
-    print_prueba((*head)->child);
-    save_plays(*head);
+    //if(*head != NULL){
+    //    cursor = (*head)->ant;
+    //    if(cursor != NULL) {
+    //        clear_board(pente);
+    //        clear_history(head);        
+    //    }
+    //}
+    //enter_data(head, hit_uno, hit_dos, filas_1, filas_2, turno);
+    //(*head)->child = create_list(pente, &(*head)->items);
+    //print_prueba((*head)->child);
+    //save_plays(*head);
     contador++;
 
     print(pente);

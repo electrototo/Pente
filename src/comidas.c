@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <gtk/gtk.h>
 
 #include "pente_types.h"
 #include "comidas.h"
@@ -79,12 +80,27 @@ void enter_hit(hit_t **head, int y, int x, int **pente) {
 }
 
 //borrar coordenada de la matriz
-void clear_hit(hit_t **head, int **pente, int jugador) { 
+void clear_hit(hit_t **head, int **pente, int jugador, game_info_t *data) { 
     hit_t *temp;
     temp = *head;
 
+    GdkPixbuf *white_token;
+    image_data_t *image_pos;
+
+    printf("check 1\n");
+    printf("score 1: %d, score 2: %d\n", data->score1, data->score2);
+    printf("check 2\n");
+
     while (temp != NULL) {
+        printf("borrando (%d, %d)\n", temp->coordenada_x, temp->coordenada_y);
         pente[temp->coordenada_y][temp->coordenada_x] = 0;
+
+        white_token = gdk_pixbuf_new_from_file("imagenes/white_token.jpg", NULL);
+
+        // set image here
+        image_pos = data->positions[temp->coordenada_y][temp->coordenada_x];
+        gtk_image_set_from_pixbuf(GTK_IMAGE(image_pos->image), white_token);
+
         *head = temp->sig;
         free(temp);
         temp = *head;

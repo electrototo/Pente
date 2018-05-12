@@ -3,7 +3,7 @@
 
 #include "pente_types.h"
 
-void coordinates(int **pente, int x, int y, int turno, game_info_t **head);
+void coordinates(int **pente, int x, int y, int turno, game_info_t *head);
 void file(char name[30]);
 void load_plays(int **pente, game_info_t **head);
 void save_plays(game_info_t *head);
