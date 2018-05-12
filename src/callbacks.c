@@ -5,6 +5,7 @@
 */
 
 #include <gtk/gtk.h>
+#include <string.h>
 
 #include "callbacks.h" 
 #include "pente_types.h" 
@@ -115,17 +116,14 @@ void gen_callback(GtkWidget *menuitem, gpointer data) {
 }
 
 // windows signals
-
 void new_game_callback(GtkWidget *widget, gpointer data) {
     game_info_t *info = (game_info_t *) data;
 
-    get_player_names_window(data);
-
     GtkWidget *splash_window = gtk_widget_get_parent(widget);
     splash_window = gtk_widget_get_parent(splash_window);
-
     gtk_widget_hide(splash_window);
-    gtk_widget_show_all(info->main_board);
+
+    get_player_names_window(data);
 }
 
 void resume_game_callback(GtkWidget *widget, gpointer data) {
@@ -155,4 +153,23 @@ void chooser_callback(GtkWidget *widget, gint response_id, gpointer data) {
         default:
             break;
     }
+}
+
+void set_player_name(GtkWidget *widget, gpointer data) {
+    name_packet_t *packet = (name_packet_t *) data;
+    game_info_t *game_info = packet->game_data;
+
+    strcpy(game_info->player1, gtk_entry_get_text(GTK_ENTRY(packet->player1)));
+    strcpy(game_info->player2, gtk_entry_get_text(GTK_ENTRY(packet->player2)));
+
+    gtk_label_set_text(GTK_LABEL(game_info->p1_label1), game_info->player1);
+    gtk_label_set_text(GTK_LABEL(game_info->p1_label2), game_info->player1);
+
+    gtk_label_set_text(GTK_LABEL(game_info->p2_label1), game_info->player2);
+    gtk_label_set_text(GTK_LABEL(game_info->p2_label2), game_info->player2);
+
+    gtk_label_set_text(GTK_LABEL(game_info->turn_label), game_info->player1);
+
+    gtk_widget_destroy(gtk_widget_get_parent(widget));
+    gtk_widget_show_all(game_info->main_board);
 }

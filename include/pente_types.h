@@ -35,6 +35,11 @@ typedef struct tool_item_dt {
     gpointer data;
 } tool_item_dt;
 
+typedef struct name_packet_t {
+    struct game_info_t *game_data;
+    GtkWidget *player1, *player2;
+} name_packet_t;
+
 // parte funcional
 typedef struct hit_t {
     int coordenada_y, coordenada_x;
@@ -45,6 +50,11 @@ typedef struct game_info_t{
   GtkWidget *main_board;
   GtkWidget *turn_image, *turn_label;
   GtkWidget *points1_label, *points2_label;
+
+  GtkWidget *p1_label1, *p2_label1;
+  GtkWidget *p1_label2, *p2_label2;
+
+  char player1[100], player2[100];
   
   int **pente_board;
   image_data_t ***positions;

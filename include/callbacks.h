@@ -29,5 +29,6 @@ void new_game_callback(GtkWidget *widget, gpointer data);
 void resume_game_callback(GtkWidget *widget, gpointer data);
 
 void chooser_callback(GtkWidget *widget, gint response_id, gpointer data);
+void set_player_name(GtkWidget *widget, gpointer data);
 
 #endif
