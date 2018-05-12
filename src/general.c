@@ -38,19 +38,36 @@ void print(int **pente)  {
       printf(" %2d |", i);
       for (j = 0; j < PENTEMAX; j++)
         {
-	  printf(" %d|", pente[i][j]);
+            printf(" %d|", pente[i][j]);
         }
       printf("\n");
     }
 }
 
 void print_prueba(total_info_t *head){
-    while (head != NULL) {
-        printf("Nodo %p\n", head);
-        printf("  sig: %p\n", head->sig);
-        //printf("X = %d, Y = %d\n", head->coor_x, head->coor_y);
-        head = head->sig;
-    }       
+    total_info_t *cursor = head;
+    plays_t *plays_cursor;
+
+    while (cursor != NULL) {
+        printf("Node %p\n", cursor);
+        printf("\tPrev: %p\n", cursor->ant);
+        printf("\tNext: %p\n", cursor->sig);
+        printf("\tChild: %p\n", cursor->child);
+        printf("\tImprimiendo informacion de coordenadas de %p\n", cursor->child);
+
+        plays_cursor = cursor->child;
+
+        while (plays_cursor != NULL) {
+            printf("\t\tPlay %p", plays_cursor);
+            printf("\t\tX, Y: %d, %d\n", plays_cursor->coor_x, plays_cursor->coor_y);
+            printf("\t\tToken value: %d\n", plays_cursor->token_value);
+            printf("\t\tNext: %p\n", plays_cursor->sig);
+
+            plays_cursor = plays_cursor->sig;
+        }
+
+        cursor = cursor->sig;
+    }
 }
 
 int valid_position(int **pente, int x, int y) {
