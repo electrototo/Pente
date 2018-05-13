@@ -54,7 +54,8 @@ gboolean image_press_callback(GtkWidget *event_box, GdkEventButton *event, gpoin
 
         if (game_data->head->score1 == 4 || game_data->head->score1 == -1 || 
             game_data->head->score2 == 4 || game_data->head->score2 == -1 ||
-            game_data->head->hit1 == 10  || game_data->head->hit2 == 10) {
+            game_data->head->hit1 == 10  || game_data->head->hit2 == 10 ||
+            game_data->head->items >= PENTEMAX * PENTEMAX) {
 
             show_winner(game_data);
         }
@@ -70,16 +71,20 @@ void destroy(GtkWidget *widget, gpointer data) {
 
 void open_file(GtkWidget *widget, gpointer data) {
   resume_game(data);
-  //game_info_t *game_info = (game_info_t *) data;
-
-  //erase_game(game_info);
-  //clear_board(game_info->pente_board, game_info);
-  //load_plays(game_info); 
 } 
 
-void new_game(GtkWidget *wdiget, gpointer data) {
-  game_info_t *game_info = (game_info_t *) data; 
-  clear_board(game_info->pente_board, game_info);
+void new_game(GtkWidget *widget, gpointer data) {
+    game_info_t *game_info = (game_info_t *) data; 
+    clear_board(game_info->pente_board, game_info);
+
+    GtkWidget *splash_window = gtk_widget_get_parent(widget);
+    splash_window = gtk_widget_get_parent(gtk_widget_get_parent(gtk_widget_get_parent(splash_window)));
+    gtk_widget_hide(splash_window);
+
+    if (game_info->head != NULL)
+        erase_game(game_info);
+
+    get_player_names_window(data);
 } 
 
 void new_game_winner(GtkWidget *widget, gpointer data) {
@@ -92,26 +97,32 @@ void new_game_winner(GtkWidget *widget, gpointer data) {
         )
     );
 
-
     gtk_widget_destroy(window);
+
     clear_board(game_info->pente_board, game_info);
+    
+    if (game_info->head != NULL)
+        erase_game(game_info);
+
+
+    get_player_names_window(data);
 }
 
-void save(GtkWidget *wdiget, gpointer data) {
+void save(GtkWidget *widget, gpointer data) {
     game_info_t *game_info = (game_info_t *) data;
 
     print_prueba(game_info->head);
     save_plays(game_info);
 } 
 
-void save_as(GtkWidget *wdiget, gpointer data) {
+void save_as(GtkWidget *widget, gpointer data) {
     save_as_screen(data);
 } 
 
-void quit(GtkWidget *wdiget, gpointer data) {
+void quit(GtkWidget *widget, gpointer data) {
 } 
 
-void undo(GtkWidget *wdiget, gpointer data) {
+void undo(GtkWidget *widget, gpointer data) {
     game_info_t *game_info = (game_info_t *) data; 
     GdkPixbuf *turn_image;
 
@@ -128,7 +139,7 @@ void undo(GtkWidget *wdiget, gpointer data) {
 
 } 
 
-void redo(GtkWidget *wdiget, gpointer data) {
+void redo(GtkWidget *widget, gpointer data) {
     game_info_t *game_info = (game_info_t *) data;
     GdkPixbuf *turn_image;
 
@@ -143,10 +154,10 @@ void redo(GtkWidget *wdiget, gpointer data) {
 
 } 
 
-void tutorial(GtkWidget *wdiget, gpointer data) {
+void tutorial(GtkWidget *widget, gpointer data) {
 } 
 
-void about_us(GtkWidget *wdiget, gpointer data) {
+void about_us(GtkWidget *widget, gpointer data) {
     printf("About us\n");
 } 
 
@@ -258,8 +269,12 @@ void set_player_name(GtkWidget *widget, gpointer data) {
     name_packet_t *packet = (name_packet_t *) data;
     game_info_t *game_info = packet->game_data;
 
+    GdkPixbuf *turn_image;
+
     strcpy(game_info->player1, gtk_entry_get_text(GTK_ENTRY(packet->player1)));
     strcpy(game_info->player2, gtk_entry_get_text(GTK_ENTRY(packet->player2)));
+
+    printf("test 1\n");
 
     if (strlen(game_info->player1) == 0)
         strcpy(game_info->player1, "Jugador 1");
@@ -273,8 +288,29 @@ void set_player_name(GtkWidget *widget, gpointer data) {
     else if (isalpha(game_info->player2[0]) && islower(game_info->player2[0]))
         game_info->player2[0] = (game_info->player2[0] - 'a') + 'A';
 
+    printf("test 2\n");
+
+    if (game_info->head == NULL) {
+        game_info->head = (total_info_t *) malloc(sizeof(total_info_t));
+
+        game_info->head->turn = 1;
+        game_info->head->score1 = 0;
+        game_info->head->score2 = 0;
+        game_info->head->hit1 = 0;
+        game_info->head->hit2 = 0;
+        game_info->head->child = NULL;
+        game_info->head->ant = NULL;
+
+        game_info->head->sig = NULL; 
+
+        turn_image = gdk_pixbuf_new_from_file("imagenes/blue_token.jpg", NULL);
+        gtk_image_set_from_pixbuf(GTK_IMAGE(game_info->turn_image), turn_image);
+    }
+
     strcpy(game_info->head->player1, game_info->player1);
     strcpy(game_info->head->player2, game_info->player2);
+
+    printf("test 3\n");
 
     gtk_label_set_text(GTK_LABEL(game_info->p1_label1), game_info->player1);
     gtk_label_set_text(GTK_LABEL(game_info->p1_label2), game_info->player1);
@@ -286,6 +322,8 @@ void set_player_name(GtkWidget *widget, gpointer data) {
 
     gtk_widget_destroy(gtk_widget_get_parent(gtk_widget_get_parent(widget)));
     gtk_widget_show_all(game_info->main_board);
+
+    printf("test 4\n");
 }
 
 void close_winner_dialog(GtkWidget *widget, gpointer data) {

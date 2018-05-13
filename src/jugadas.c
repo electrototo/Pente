@@ -13,7 +13,7 @@
 void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t *game_data) {
     hit_t *first = NULL; //inicializar lista de hits
     game_info_t *cursor;
-    int contador = 1, next;
+    int contador, next;
 
     int filas;
     next = (turno == VAL1) ? VAL2 : VAL1;
@@ -49,7 +49,7 @@ void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t *game
     game_data->head->child = create_list(game_data);
 
     print(pente);
-    contador++;
+    contador = game_data->head->items;
 }
 
 void file(char name[30]) {

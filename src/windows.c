@@ -128,6 +128,10 @@ void show_winner(gpointer data) {
 
     strcat(buffer_message, " is the winner!");
 
+    if (game_data->head->items >= PENTEMAX * PENTEMAX) {
+        strcpy(buffer_message, "Game over");
+    }
+
     label = gtk_label_new(buffer_message);
 
     vbox = gtk_vbox_new(TRUE, 0);
