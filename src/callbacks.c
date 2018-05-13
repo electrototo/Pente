@@ -237,16 +237,16 @@ void chooser_callback(GtkWidget *widget, gint response_id, gpointer data) {
             copy = (char *) malloc(strlen(file_name) + 6);
 
             copy[0] = 0;
-            printf("file_name: %s\n", file_name);
 
             strcpy(copy, file_name);
             strcat(copy, ".ice");
 
-            printf("nombre del archivo: %s\n", copy);
-
             game_info->file_name = copy;
 
             save_plays(game_info);
+
+            gtk_widget_destroy(widget);
+
             break;
 
         default:
