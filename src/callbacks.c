@@ -112,6 +112,7 @@ void quit(GtkWidget *wdiget, gpointer data) {
 
 void undo(GtkWidget *wdiget, gpointer data) {
     game_info_t *game_info = (game_info_t *) data; 
+    GdkPixbuf *turn_image;
 
     printf("Imprimiendo antes:\n");
     print_prueba(game_info->head);
@@ -123,10 +124,13 @@ void undo(GtkWidget *wdiget, gpointer data) {
         clear_board(game_info->pente_board, game_info);
         load_from_list(game_info, game_info->head->child);
     }
+
 } 
 
 void redo(GtkWidget *wdiget, gpointer data) {
     game_info_t *game_info = (game_info_t *) data;
+    GdkPixbuf *turn_image;
+
     printf("Iprimiendo despues: \n");
 
     if(game_info->head->ant != NULL){
@@ -135,6 +139,7 @@ void redo(GtkWidget *wdiget, gpointer data) {
         clear_board(game_info->pente_board, game_info);
         load_from_list(game_info, game_info->head->child);
     }
+
 } 
 
 void tutorial(GtkWidget *wdiget, gpointer data) {

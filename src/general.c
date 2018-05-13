@@ -33,7 +33,7 @@ void tick_image_board(plays_t *actual_coord, game_info_t *game_data) {
     int token_value = actual_coord->token_value;
 
     image_pos = game_data->positions[y][x];
-    GdkPixbuf *token_image;
+    GdkPixbuf *token_image, *turn_image;
 
     if (token_value == VAL2)
         token_image = gdk_pixbuf_new_from_file("imagenes/blue_token.jpg", NULL);
