@@ -138,6 +138,8 @@ void get_player_names_window(gpointer data) {
     vbox = gtk_vbox_new(TRUE, 0);
     gtk_container_add(GTK_CONTAINER(window), vbox);
 
+    g_signal_connect(GTK_WINDOW(window), "delete-event", G_CALLBACK(delete_event), data);
+
     name_packet_t *info_packet = (name_packet_t *) g_malloc(sizeof(name_packet_t));
 
     // tabla de jugador 1
