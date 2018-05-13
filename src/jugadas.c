@@ -22,6 +22,10 @@ void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t *game
         board(pente, cor_x, cor_y, turno);
 
         printf("pip pop\n");
+        if (game_data->head->ant != NULL) {
+            clear_history(game_data);
+        }
+
         enter_data(&(game_data->head));
 
         game_data->head->score1 = count(pente, VAL2);
@@ -44,23 +48,10 @@ void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t *game
     else
         printf("<Lugar ya ocupado>\n");
 
-    //if(game_data->head != NULL){
-    //    cursor = (*head)->ant;
-    //    if(cursor != NULL) {
-    //        clear_board(pente);
-    //        clear_history(head);        
-    //    }
-    //}
-    
     game_data->head->child = create_list(game_data);
 
-    //print_prueba(game_data->head);
     print(pente);
     contador++;
-
-    //acomodar
-    // erase_hits(&first);
-    // erase_game(head);
 }
 
 void file(char name[30]) {
@@ -119,14 +110,20 @@ void load_plays(game_info_t *game_data) {
     
     actual_coord = temp->child;
     printf("recorriendo posiciones\n");
-    while(actual_coord != NULL) {
-        board(game_data->pente_board, actual_coord->coor_x, actual_coord->coor_y, actual_coord->token_value);
-        tick_image_board(actual_coord, game_data);
-
-        actual_coord = actual_coord->sig;
-    }
+    load_from_list(game_data, actual_coord);
 
     print(game_data->pente_board);
+}
+
+void load_from_list(game_info_t *game_data, plays_t *head) {
+    plays_t *cursor = head;
+
+    while(cursor != NULL) {
+        board(game_data->pente_board, cursor->coor_x, cursor->coor_y, cursor->token_value);
+        tick_image_board(cursor, game_data);
+
+        cursor = cursor->sig;
+    }
 }
 
 void save_plays(game_info_t *game_data) {

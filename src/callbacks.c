@@ -112,12 +112,29 @@ void quit(GtkWidget *wdiget, gpointer data) {
 
 void undo(GtkWidget *wdiget, gpointer data) {
     game_info_t *game_info = (game_info_t *) data; 
-    clear_board(game_info->pente_board, game_info);
+
+    printf("Imprimiendo antes:\n");
+    print_prueba(game_info->head);
+
+    // erase_game(game_info);
+    if (game_info->head->sig != NULL) {
+        game_info->head = game_info->head->sig;
+
+        clear_board(game_info->pente_board, game_info);
+        load_from_list(game_info, game_info->head->child);
+    }
 } 
 
 void redo(GtkWidget *wdiget, gpointer data) {
-    game_info_t *game_info = (game_info_t *) data; 
-    clear_board(game_info->pente_board, game_info);
+    game_info_t *game_info = (game_info_t *) data;
+    printf("Iprimiendo despues: \n");
+
+    if(game_info->head->ant != NULL){
+        game_info->head = game_info->head->ant; 
+
+        clear_board(game_info->pente_board, game_info);
+        load_from_list(game_info, game_info->head->child);
+    }
 } 
 
 void tutorial(GtkWidget *wdiget, gpointer data) {

@@ -13,4 +13,6 @@ void clear_history(game_info_t *head);
 void erase_game(game_info_t *head);
 void erase_plays(plays_t **head);
 
+void load_from_list(game_info_t *game_data, plays_t *head);
+
 #endif
