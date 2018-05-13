@@ -22,9 +22,8 @@ void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t *game
         board(pente, cor_x, cor_y, turno);
 
         printf("pip pop\n");
-        if (game_data->head->ant != NULL) {
+        if (game_data->head->ant != NULL)
             clear_history(game_data);
-        }
 
         enter_data(&(game_data->head));
 
@@ -36,9 +35,8 @@ void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t *game
             clear_hit(&first, pente, next, game_data);
 
         game_data->head->hit2 += count_hit(pente, VAL2, VAL1, &first);
-        if (first != NULL) {
+        if (first != NULL)
             clear_hit(&first, pente, turno, game_data);
-        }
 
         printf("\nContador filas 1  = %d\n", game_data->head->score1);
         printf("Comidas jugador 1   = %d\n\n", game_data->head->hit1);
