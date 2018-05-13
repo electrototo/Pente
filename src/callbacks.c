@@ -69,10 +69,10 @@ void destroy(GtkWidget *widget, gpointer data) {
 void open_file(GtkWidget *widget, gpointer data) {
   //resume_game(data);
   game_info_t *game_info = (game_info_t *) data;
+
   erase_game(game_info);
   clear_board(game_info->pente_board, game_info);
   load_plays(game_info); 
-  
 } 
 
 void new_game(GtkWidget *wdiget, gpointer data) {
@@ -142,15 +142,35 @@ void resume_game_callback(GtkWidget *widget, gpointer data) {
 }
 
 void chooser_callback(GtkWidget *widget, gint response_id, gpointer data) {
-    char *uri;
+    FILE *fp;
+    char *uri, *file_name;
 
-    g_print("callback\n");
+    game_info_t *game_info = (game_info_t *) data;
+
     switch (response_id) {
         case RESPONSE_OPEN:
             uri = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(widget));
 
             // aqui carga en memoria el archivo
             g_print("uri: %s\n", uri);
+            file_name = &uri[7];
+
+            fp = fopen(file_name, "rb");
+
+            if (fp == NULL) {
+                printf("error opening file\n");
+            }
+            else {
+                fclose(fp);
+
+                gtk_widget_destroy(widget);
+
+                gtk_widget_show_all(game_info->main_board);
+
+                erase_game(game_info);
+                clear_board(game_info->pente_board, game_info);
+                load_plays(game_info); 
+            }
 
             g_free(uri);
 
