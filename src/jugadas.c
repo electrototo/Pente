@@ -110,6 +110,9 @@ void load_plays(game_info_t *game_data) {
     printf("recorriendo posiciones\n");
     load_from_list(game_data, actual_coord);
 
+    strcpy(game_data->player1, game_data->head->player1);
+    strcpy(game_data->player2, game_data->head->player2);
+
     print(game_data->pente_board);
 }
 
@@ -173,6 +176,12 @@ void enter_data(total_info_t **head) {
     temp->hit1 = (*head)->hit1;
     temp->hit2 = (*head)->hit2;
     temp->turn = (*head)->turn; 
+
+    printf("nombre del jugador 1: %s\n", (*head)->player1);
+
+    strcpy(temp->player1, (*head)->player1);
+    strcpy(temp->player2, (*head)->player2);
+
     temp->ant = NULL;
 
     temp->sig = *head; 

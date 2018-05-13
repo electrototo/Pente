@@ -203,6 +203,21 @@ void chooser_callback(GtkWidget *widget, gint response_id, gpointer data) {
                 erase_game(game_info);
                 clear_board(game_info->pente_board, game_info);
                 load_plays(game_info); 
+
+                strcpy(game_info->player1, game_info->head->player1);
+                strcpy(game_info->player2, game_info->head->player2);
+
+                gtk_label_set_text(GTK_LABEL(game_info->p1_label1), game_info->player1);
+                gtk_label_set_text(GTK_LABEL(game_info->p1_label2), game_info->player1);
+
+                gtk_label_set_text(GTK_LABEL(game_info->p2_label1), game_info->player2);
+                gtk_label_set_text(GTK_LABEL(game_info->p2_label2), game_info->player2);
+
+                if (game_info->head->turn == VAL1)
+                    gtk_label_set_text(GTK_LABEL(game_info->turn_label), game_info->player1);
+
+                else
+                    gtk_label_set_text(GTK_LABEL(game_info->turn_label), game_info->player2);
             }
 
             g_free(uri);
@@ -237,6 +252,9 @@ void set_player_name(GtkWidget *widget, gpointer data) {
 
     else if (isalpha(game_info->player2[0]) && islower(game_info->player2[0]))
         game_info->player2[0] = (game_info->player2[0] - 'a') + 'A';
+
+    strcpy(game_info->head->player1, game_info->player1);
+    strcpy(game_info->head->player2, game_info->player2);
 
     gtk_label_set_text(GTK_LABEL(game_info->p1_label1), game_info->player1);
     gtk_label_set_text(GTK_LABEL(game_info->p1_label2), game_info->player1);

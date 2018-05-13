@@ -62,6 +62,7 @@ game_info_t *game_init() {
     info->p2_label1 = create_label("Jugador 2");
 
     info->turn_label = create_label("Jugador 1");
+    info->file_name = NULL;
 
     total_info_t *head = (total_info_t *) malloc(sizeof(total_info_t));
     head->turn = 1;

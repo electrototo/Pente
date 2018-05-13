@@ -54,7 +54,8 @@ typedef struct game_info_t{
   GtkWidget *p1_label1, *p2_label1;
   GtkWidget *p1_label2, *p2_label2;
 
-  char player1[100], player2[100];
+  char player1[50], player2[50];
+  char *file_name;
   
   int **pente_board;
   image_data_t ***positions;
@@ -65,6 +66,8 @@ typedef struct total_info_t {
     int hit1, hit2;
     int score1, score2;
     int turn, items;
+
+    char player1[50], player2[50];
 
     struct plays_t *child;
     struct total_info_t *sig, *ant;
