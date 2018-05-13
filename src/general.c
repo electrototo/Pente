@@ -25,6 +25,25 @@ void board(int **pente, int x, int y, int jugador) {
   pente[y][x] = jugador;
 }
 
+void tick_image_board(plays_t *actual_coord, game_info_t *game_data) {
+    image_data_t *image_pos;
+
+    int x = actual_coord->coor_x;
+    int y = actual_coord->coor_y;
+    int token_value = actual_coord->token_value;
+
+    image_pos = game_data->positions[y][x];
+    GdkPixbuf *token_image;
+
+    if (token_value == VAL2)
+        token_image = gdk_pixbuf_new_from_file("imagenes/blue_token.jpg", NULL);
+
+    else if (token_value == VAL1)
+        token_image = gdk_pixbuf_new_from_file("imagenes/red_token.jpg", NULL);
+
+    gtk_image_set_from_pixbuf(GTK_IMAGE(image_pos->image), token_image);
+}
+
 void print(int **pente)  {
   int i, j;
   printf("    ");
@@ -32,6 +51,7 @@ void print(int **pente)  {
     {
       printf(" %2d", i);
     }
+
   printf("\n");
   for (i = 0; i < PENTEMAX; i++)
     {
