@@ -121,7 +121,7 @@ void show_winner(gpointer data) {
     gtk_widget_set_usize(close_button, 150, 50);
     gtk_widget_set_usize(new_game_button, 150, 50);
 
-    if (game_data->head->score1 == 4 || game_data->head->score1 == -1 || game_data->head->hit1 == 10)
+    if (game_data->head->score1 >= 4 || game_data->head->score1 == -1 || game_data->head->hit1 >= 10)
         strcpy(buffer_message, game_data->player1);
     else
         strcpy(buffer_message, game_data->player2);
@@ -284,12 +284,19 @@ GtkWidget *main_window_board(game_info_t *game_data) {
     game_data->turn_image = gtk_image_new_from_file("imagenes/blue_token.jpg");
     gtk_container_add(GTK_CONTAINER(turn), game_data->turn_image);
 
-    frame = gtk_frame_new("Comidas");
+    frame = gtk_frame_new("Puntaje");
     gtk_container_add(GTK_CONTAINER(sidebar_menu), frame);
     gtk_container_add(GTK_CONTAINER(frame), comidas);
 
-    gtk_container_add(GTK_CONTAINER(comidas), game_data->p1_label2);
-    gtk_container_add(GTK_CONTAINER(comidas), game_data->p2_label2);
+    hbox = gtk_hbox_new(TRUE, 0);
+    gtk_container_add(GTK_CONTAINER(comidas), hbox);
+    gtk_container_add(GTK_CONTAINER(hbox), game_data->p1_label2);
+    gtk_container_add(GTK_CONTAINER(hbox), game_data->points1_label);
+
+    hbox = gtk_hbox_new(TRUE, 0);
+    gtk_container_add(GTK_CONTAINER(comidas), hbox);
+    gtk_container_add(GTK_CONTAINER(hbox), game_data->p2_label2);
+    gtk_container_add(GTK_CONTAINER(hbox), game_data->points2_label);
 
     gtk_container_add(GTK_CONTAINER(window), vbox);
 

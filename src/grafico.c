@@ -61,6 +61,9 @@ game_info_t *game_init() {
     info->p1_label1 = create_label("Jugador 1");
     info->p2_label1 = create_label("Jugador 2");
 
+    info->points1_label = create_label("0");
+    info->points2_label = create_label("0");
+
     info->turn_label = create_label("Jugador 1");
     info->file_name = NULL;
 

@@ -23,6 +23,7 @@ gboolean image_press_callback(GtkWidget *event_box, GdkEventButton *event, gpoin
     game_info_t *game_data = (game_info_t *) img_data->game_info;
 
     GdkPixbuf *new_image, *turn_image;
+    char pbuffer[10];
 
     printf("Click at: %d, %d\n", img_data->x, img_data->y);
     printf("Player 1 points: %d, Player 2 points: %d\n",
@@ -52,9 +53,15 @@ gboolean image_press_callback(GtkWidget *event_box, GdkEventButton *event, gpoin
 
         coordinates(game_data->pente_board, img_data->x, img_data->y, (game_data->head)->turn, game_data);
 
-        if (game_data->head->score1 == 4 || game_data->head->score1 == -1 || 
-            game_data->head->score2 == 4 || game_data->head->score2 == -1 ||
-            game_data->head->hit1 == 10  || game_data->head->hit2 == 10 ||
+        sprintf(pbuffer, "%d", game_data->head->hit1);
+        gtk_label_set_text(GTK_LABEL(game_data->points1_label), pbuffer);
+
+        sprintf(pbuffer, "%d", game_data->head->hit2);
+        gtk_label_set_text(GTK_LABEL(game_data->points2_label), pbuffer);
+
+        if (game_data->head->score1 >= 4 || game_data->head->score1 == -1 || 
+            game_data->head->score2 >= 4 || game_data->head->score2 == -1 ||
+            game_data->head->hit1 >= 10  || game_data->head->hit2 >= 10 ||
             game_data->head->items >= PENTEMAX * PENTEMAX) {
 
             show_winner(game_data);
@@ -76,10 +83,6 @@ void open_file(GtkWidget *widget, gpointer data) {
 void new_game(GtkWidget *widget, gpointer data) {
     game_info_t *game_info = (game_info_t *) data; 
     clear_board(game_info->pente_board, game_info);
-
-    GtkWidget *splash_window = gtk_widget_get_parent(widget);
-    splash_window = gtk_widget_get_parent(gtk_widget_get_parent(gtk_widget_get_parent(splash_window)));
-    gtk_widget_hide(splash_window);
 
     if (game_info->head != NULL)
         erase_game(game_info);
