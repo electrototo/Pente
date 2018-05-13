@@ -115,6 +115,9 @@ void show_winner(gpointer data) {
     close_button = gtk_button_new_with_label("CLOSE");
     new_game_button = gtk_button_new_with_label("NEW GAME");
 
+    g_signal_connect(close_button, "clicked", G_CALLBACK(close_winner_dialog), data);
+    g_signal_connect(new_game_button, "clicked", G_CALLBACK(new_game_winner), data);
+
     gtk_widget_set_usize(close_button, 150, 50);
     gtk_widget_set_usize(new_game_button, 150, 50);
 

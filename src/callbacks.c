@@ -78,9 +78,23 @@ void open_file(GtkWidget *widget, gpointer data) {
 
 void new_game(GtkWidget *wdiget, gpointer data) {
   game_info_t *game_info = (game_info_t *) data; 
-  printf("New game");
   clear_board(game_info->pente_board, game_info);
 } 
+
+void new_game_winner(GtkWidget *widget, gpointer data) {
+    game_info_t *game_info = (game_info_t *) data;
+    GtkWidget *window;
+
+    window = gtk_widget_get_parent(
+        gtk_widget_get_parent(
+            gtk_widget_get_parent(widget)
+        )
+    );
+
+
+    gtk_widget_destroy(window);
+    clear_board(game_info->pente_board, game_info);
+}
 
 void save(GtkWidget *wdiget, gpointer data) {
     game_info_t *game_info = (game_info_t *) data;
@@ -94,23 +108,19 @@ void save_as(GtkWidget *wdiget, gpointer data) {
 } 
 
 void quit(GtkWidget *wdiget, gpointer data) {
-    printf("Quit");
 } 
 
 void undo(GtkWidget *wdiget, gpointer data) {
     game_info_t *game_info = (game_info_t *) data; 
-    printf("Undo");
     clear_board(game_info->pente_board, game_info);
 } 
 
 void redo(GtkWidget *wdiget, gpointer data) {
     game_info_t *game_info = (game_info_t *) data; 
-    printf("Redo");
     clear_board(game_info->pente_board, game_info);
 } 
 
 void tutorial(GtkWidget *wdiget, gpointer data) {
-    printf("Tutorial\n");
 } 
 
 void about_us(GtkWidget *wdiget, gpointer data) {
@@ -216,4 +226,11 @@ void set_player_name(GtkWidget *widget, gpointer data) {
 
     gtk_widget_destroy(gtk_widget_get_parent(gtk_widget_get_parent(widget)));
     gtk_widget_show_all(game_info->main_board);
+}
+
+void close_winner_dialog(GtkWidget *widget, gpointer data) {
+    game_info_t *game_data = (game_info_t *) data;
+
+    gtk_widget_destroy(gtk_widget_get_parent(widget));
+    destroy(widget, data);
 }
