@@ -6,6 +6,7 @@
 
 #include <gtk/gtk.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "callbacks.h" 
 #include "pente_types.h" 
@@ -192,6 +193,18 @@ void set_player_name(GtkWidget *widget, gpointer data) {
 
     strcpy(game_info->player1, gtk_entry_get_text(GTK_ENTRY(packet->player1)));
     strcpy(game_info->player2, gtk_entry_get_text(GTK_ENTRY(packet->player2)));
+
+    if (strlen(game_info->player1) == 0)
+        strcpy(game_info->player1, "Jugador 1");
+
+    else if (isalpha(game_info->player1[0]) && islower(game_info->player1[0]))
+        game_info->player1[0] = (game_info->player1[0] - 'a') + 'A';
+
+    if (strlen(game_info->player2) == 0)
+        strcpy(game_info->player2, "Jugador 2");
+
+    else if (isalpha(game_info->player2[0]) && islower(game_info->player2[0]))
+        game_info->player2[0] = (game_info->player2[0] - 'a') + 'A';
 
     gtk_label_set_text(GTK_LABEL(game_info->p1_label1), game_info->player1);
     gtk_label_set_text(GTK_LABEL(game_info->p1_label2), game_info->player1);

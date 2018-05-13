@@ -5,6 +5,7 @@
 */
 
 #include <gtk/gtk.h>
+#include <string.h>
 
 #include "callbacks.h"
 #include "windows.h"
@@ -102,6 +103,10 @@ void show_winner(gpointer data) {
     GtkWidget *winner_window, *vbox, *hbox;
     GtkWidget *close_button, *new_game_button, *label;
 
+    char buffer_message[100];
+
+    game_info_t *game_data = (game_info_t *) data;
+
     winner_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_container_set_border_width(GTK_CONTAINER(winner_window), 30);
 
@@ -113,7 +118,14 @@ void show_winner(gpointer data) {
     gtk_widget_set_usize(close_button, 150, 50);
     gtk_widget_set_usize(new_game_button, 150, 50);
 
-    label = gtk_label_new("Player 1 wins!");
+    if (game_data->head->score1 == 4 || game_data->head->score1 == -1 || game_data->head->hit1 == 10)
+        strcpy(buffer_message, game_data->player1);
+    else
+        strcpy(buffer_message, game_data->player2);
+
+    strcat(buffer_message, " is the winner!");
+
+    label = gtk_label_new(buffer_message);
 
     vbox = gtk_vbox_new(TRUE, 0);
     gtk_container_add(GTK_CONTAINER(winner_window), vbox);
