@@ -68,7 +68,12 @@ void load_plays(game_info_t *game_data) {
     plays_t *actual_coord;
     long size;
     //file(name); 
-    fd = fopen("juego.ice", "r");
+
+    if (game_data->file_name == NULL)
+        fd = fopen("juego.ice", "r");
+
+    else
+        fd = fopen(game_data->file_name, "r");
 
     if (fd == NULL) {
         printf("\n<nonexistent file>\n");
@@ -140,7 +145,6 @@ void load_from_list(game_info_t *game_data, plays_t *head) {
 
 void save_plays(game_info_t *game_data) {
     FILE *fd;
-    char name[30];
     total_info_t *temp;
     plays_t *cursor;
 
@@ -149,8 +153,16 @@ void save_plays(game_info_t *game_data) {
     while (temp != NULL && temp->sig != NULL)
         temp = temp->sig;
 
-    //file(name);
-    fd = fopen("juego.ice", "w");
+    if(game_data->file_name == NULL) {
+        fd = fopen("juego.ice", "w");
+        printf("GUARDANDO EN JUEGO.ICE");
+    }
+
+    else {
+        fd = fopen(game_data->file_name, "w");
+        printf("GUARDANDO EN %s\n", game_data->file_name);
+    }
+    
     while (temp != NULL) {
         fwrite(temp, sizeof(total_info_t), 1, fd);
         printf("temp items = %d\n", temp->items);
@@ -166,8 +178,11 @@ void save_plays(game_info_t *game_data) {
         printf("Done\n"); 
         temp = temp->ant;
     }
+
     fclose(fd);
-}
+}       
+
+
 
 void enter_data(total_info_t **head) {
     total_info_t *temp, *temp2;

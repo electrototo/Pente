@@ -9,7 +9,8 @@
 
 #define RESPONSE_OPEN 1
 #define RESPONSE_CANCEL 2
-
+#define RESPONSE_SAVE_AS 3
+#define RESPONSE_SAVE_AS 3
 #define PENTEMAX 20
 #define VAL1 1
 #define VAL2 2

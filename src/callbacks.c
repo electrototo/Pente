@@ -7,6 +7,7 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 #include "callbacks.h" 
 #include "pente_types.h" 
@@ -176,18 +177,18 @@ void resume_game_callback(GtkWidget *widget, gpointer data) {
 
 void chooser_callback(GtkWidget *widget, gint response_id, gpointer data) {
     FILE *fp;
-    char *uri, *file_name;
+    char *uri, *file_name, *copy;
 
     game_info_t *game_info = (game_info_t *) data;
 
+    uri = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(widget));
+
+    // aqui carga en memoria el archivo
+    g_print("uri: %s\n", uri);
+    file_name = &uri[7];
+
     switch (response_id) {
         case RESPONSE_OPEN:
-            uri = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(widget));
-
-            // aqui carga en memoria el archivo
-            g_print("uri: %s\n", uri);
-            file_name = &uri[7];
-
             fp = fopen(file_name, "rb");
 
             if (fp == NULL) {
@@ -199,6 +200,9 @@ void chooser_callback(GtkWidget *widget, gint response_id, gpointer data) {
                 gtk_widget_destroy(widget);
 
                 gtk_widget_show_all(game_info->main_board);
+
+                game_info->file_name = (char *) malloc(strlen(file_name));
+                strcpy(game_info->file_name, file_name);
 
                 erase_game(game_info);
                 clear_board(game_info->pente_board, game_info);
@@ -227,6 +231,22 @@ void chooser_callback(GtkWidget *widget, gint response_id, gpointer data) {
         case RESPONSE_CANCEL:
             gtk_widget_destroy(widget);
             g_print("Cancel_data\n");
+            break;
+    
+        case RESPONSE_SAVE_AS:
+            copy = (char *) malloc(strlen(file_name) + 6);
+
+            copy[0] = 0;
+            printf("file_name: %s\n", file_name);
+
+            strcpy(copy, file_name);
+            strcat(copy, ".ice");
+
+            printf("nombre del archivo: %s\n", copy);
+
+            game_info->file_name = copy;
+
+            save_plays(game_info);
             break;
 
         default:

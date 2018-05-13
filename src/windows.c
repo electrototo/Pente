@@ -80,7 +80,7 @@ void save_as_screen(gpointer data) {
         NULL,
         GTK_FILE_CHOOSER_ACTION_SAVE,
         "Save",
-        RESPONSE_OPEN,
+        RESPONSE_SAVE_AS,
         "Cancel",
         RESPONSE_CANCEL,
         NULL
