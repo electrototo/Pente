@@ -21,7 +21,6 @@ void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t *game
     if (valid_position(pente, cor_x, cor_y)) {
         board(pente, cor_x, cor_y, turno);
 
-        printf("pip pop\n");
         if (game_data->head->ant != NULL)
             clear_history(game_data);
 
@@ -63,11 +62,9 @@ void file(char name[30]) {
 
 void load_plays(game_info_t *game_data) {
     FILE *fd;
-    //char name[30];
     total_info_t *temp, *temp2;
     plays_t *actual_coord;
     long size;
-    //file(name); 
 
     if (game_data->file_name == NULL)
         fd = fopen("juego.ice", "r");
@@ -95,11 +92,8 @@ void load_plays(game_info_t *game_data) {
             fread(actual_coord, sizeof(plays_t), 1, fd);
             actual_coord->sig = temp->child;
             temp->child = actual_coord; 
-            printf("\tX = %d Y = %d\n", actual_coord->coor_x, actual_coord->coor_y);
-            printf("\tJugador %d\n", actual_coord->token_value); 
-
         }
-        printf("fin\n"); 
+
         game_data->head = temp;
         if (game_data->head->sig != NULL) {
             temp2 = game_data->head->sig;
@@ -107,12 +101,10 @@ void load_plays(game_info_t *game_data) {
         }
     }
     fclose(fd);
-    printf("\n<file loaded>\n");
 
     temp = game_data->head;
     
     actual_coord = temp->child;
-    printf("recorriendo posiciones\n");
     load_from_list(game_data, actual_coord);
 
     strcpy(game_data->player1, game_data->head->player1);
@@ -155,27 +147,21 @@ void save_plays(game_info_t *game_data) {
 
     if(game_data->file_name == NULL) {
         fd = fopen("juego.ice", "w");
-        printf("GUARDANDO EN JUEGO.ICE");
     }
 
     else {
         fd = fopen(game_data->file_name, "w");
-        printf("GUARDANDO EN %s\n", game_data->file_name);
     }
     
     while (temp != NULL) {
         fwrite(temp, sizeof(total_info_t), 1, fd);
-        printf("temp items = %d\n", temp->items);
-        printf("temp turn = %d\n", temp->turn);
         cursor = temp->child; 
 
         while(cursor != NULL){
             fwrite(cursor, sizeof(plays_t), 1, fd);
-            printf("cursor jugador = %d\n", cursor->token_value);
             cursor = cursor->sig; 
         }
 
-        printf("Done\n"); 
         temp = temp->ant;
     }
 
@@ -191,8 +177,6 @@ void enter_data(total_info_t **head) {
     temp->hit1 = (*head)->hit1;
     temp->hit2 = (*head)->hit2;
     temp->turn = (*head)->turn; 
-
-    printf("nombre del jugador 1: %s\n", (*head)->player1);
 
     strcpy(temp->player1, (*head)->player1);
     strcpy(temp->player2, (*head)->player2);
@@ -216,7 +200,6 @@ plays_t *create_list(game_info_t *game_data) {
     for (i = 0; i < PENTEMAX; i++) {
         for (j = 0; j < PENTEMAX; j++) {
             if (game_data->pente_board[i][j] != 0) {
-                printf("create_list creando\n");
                 temp = (plays_t *)malloc(sizeof(plays_t));
                 temp->coor_x = j;
                 temp->coor_y = i;

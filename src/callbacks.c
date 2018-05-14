@@ -25,9 +25,9 @@ gboolean image_press_callback(GtkWidget *event_box, GdkEventButton *event, gpoin
     GdkPixbuf *new_image, *turn_image;
     char pbuffer[10];
 
-    printf("Click at: %d, %d\n", img_data->x, img_data->y);
+    /*printf("Click at: %d, %d\n", img_data->x, img_data->y);
     printf("Player 1 points: %d, Player 2 points: %d\n",
-        game_data->head->score1, game_data->head->score2);
+        game_data->head->score1, game_data->head->score2);*/
 
     if (valid_position(game_data->pente_board, img_data->x, img_data->y)) {
         print(game_data->pente_board);
@@ -114,7 +114,6 @@ void new_game_winner(GtkWidget *widget, gpointer data) {
 void save(GtkWidget *widget, gpointer data) {
     game_info_t *game_info = (game_info_t *) data;
 
-    print_prueba(game_info->head);
     save_plays(game_info);
 } 
 
@@ -129,10 +128,6 @@ void undo(GtkWidget *widget, gpointer data) {
     game_info_t *game_info = (game_info_t *) data; 
     GdkPixbuf *turn_image;
 
-    printf("Imprimiendo antes:\n");
-    print_prueba(game_info->head);
-
-    // erase_game(game_info);
     if (game_info->head->sig != NULL) {
         game_info->head = game_info->head->sig;
 
@@ -145,8 +140,6 @@ void undo(GtkWidget *widget, gpointer data) {
 void redo(GtkWidget *widget, gpointer data) {
     game_info_t *game_info = (game_info_t *) data;
     GdkPixbuf *turn_image;
-
-    printf("Iprimiendo despues: \n");
 
     if(game_info->head->ant != NULL){
         game_info->head = game_info->head->ant; 
@@ -277,8 +270,6 @@ void set_player_name(GtkWidget *widget, gpointer data) {
     strcpy(game_info->player1, gtk_entry_get_text(GTK_ENTRY(packet->player1)));
     strcpy(game_info->player2, gtk_entry_get_text(GTK_ENTRY(packet->player2)));
 
-    printf("test 1\n");
-
     if (strlen(game_info->player1) == 0)
         strcpy(game_info->player1, "Jugador 1");
 
@@ -290,8 +281,6 @@ void set_player_name(GtkWidget *widget, gpointer data) {
 
     else if (isalpha(game_info->player2[0]) && islower(game_info->player2[0]))
         game_info->player2[0] = (game_info->player2[0] - 'a') + 'A';
-
-    printf("test 2\n");
 
     if (game_info->head == NULL) {
         game_info->head = (total_info_t *) malloc(sizeof(total_info_t));
@@ -313,8 +302,6 @@ void set_player_name(GtkWidget *widget, gpointer data) {
     strcpy(game_info->head->player1, game_info->player1);
     strcpy(game_info->head->player2, game_info->player2);
 
-    printf("test 3\n");
-
     gtk_label_set_text(GTK_LABEL(game_info->p1_label1), game_info->player1);
     gtk_label_set_text(GTK_LABEL(game_info->p1_label2), game_info->player1);
 
@@ -325,8 +312,6 @@ void set_player_name(GtkWidget *widget, gpointer data) {
 
     gtk_widget_destroy(gtk_widget_get_parent(gtk_widget_get_parent(widget)));
     gtk_widget_show_all(game_info->main_board);
-
-    printf("test 4\n");
 }
 
 void close_winner_dialog(GtkWidget *widget, gpointer data) {
