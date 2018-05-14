@@ -7,22 +7,25 @@
 #include "filas.h"
 
 void clear_board(int **pente, game_info_t *data) {
-  GdkPixbuf *white_token;
-  image_data_t *image_pos;
+    GdkPixbuf *white_token;
+    image_data_t *image_pos;
   
-  white_token = gdk_pixbuf_new_from_file("imagenes/white_token.jpg", NULL);
+    white_token = gdk_pixbuf_new_from_file("imagenes/white_token.jpg", NULL);
   
-  for (int y = 0; y < PENTEMAX; y++){
-    for (int x = 0; x < PENTEMAX; x++){
-      pente[y][x] = 0;
-      image_pos = data->positions[y][x];
-      gtk_image_set_from_pixbuf(GTK_IMAGE(image_pos->image), white_token);
+    for (int y = 0; y < PENTEMAX; y++){
+        for (int x = 0; x < PENTEMAX; x++){
+            pente[y][x] = 0;
+            image_pos = data->positions[y][x];
+            gtk_image_set_from_pixbuf(GTK_IMAGE(image_pos->image), white_token);
+        }
     }
-  }
+
+    gtk_label_set_text(GTK_LABEL(data->points1_label), "0");
+    gtk_label_set_text(GTK_LABEL(data->points2_label), "0");
 }
 
 void board(int **pente, int x, int y, int jugador) {
-  pente[y][x] = jugador;
+    pente[y][x] = jugador;
 }
 
 void tick_image_board(plays_t *actual_coord, game_info_t *game_data) {
