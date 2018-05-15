@@ -67,4 +67,20 @@ GtkWidget *create_label(char *str);
 **/
 GtkWidget *main_window_board(game_info_t *game_data);
 
+/**
+* Muestra la venta de about us
+* 
+* @author Estibaliz Cano, Isabel León, Cristobal Liendo
+* @return window La ventana principal del tablero de juego.
+**/
+GtkWidget *about_us_window();
+
+/**
+* Muestra la ventana del tutorial 
+* 
+* @author Estibaliz Cano, Isabel León, Cristobal Liendo
+* @return window La ventana principal del tablero de juego.
+**/
+GtkWidget *tutorial_window();
+
 #endif

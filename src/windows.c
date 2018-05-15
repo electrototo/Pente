@@ -315,3 +315,53 @@ GtkWidget *create_label(char *str) {
 
     return label;
 }
+
+GtkWidget *tutorial_window() {
+    GtkWidget *window, *vbox;
+
+    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title(GTK_WINDOW(window), "Pente v1.0");
+    gtk_container_set_border_width(GTK_CONTAINER(window), 10);
+
+    g_signal_connect(window, "delete-event", G_CALLBACK(close_about_us), NULL);
+
+    vbox = gtk_vbox_new(TRUE, 3);
+    gtk_container_add(GTK_CONTAINER(window), vbox);
+
+    gtk_container_add(GTK_CONTAINER(vbox), create_label("El juego Pente consiste en un tablero de 20x20 casillas, en el cual, los jugadores colocaran una ficha a la vez, de manera alternada.\n\n"));
+
+    gtk_container_add(GTK_CONTAINER(vbox), create_label("Existen tres maneras en las que se puede ganar el juego:"));
+    gtk_container_add(GTK_CONTAINER(vbox), create_label("1.- Lograr colocar 5 fichas del mismo color de manera consecutiva, ya sea de manera vertical, horizontal o diagonal."));
+    gtk_container_add(GTK_CONTAINER(vbox), create_label("2.- Colocar 5 filas de 4 fichas consecutivas del mismo color en las mismas direcciones mencionadas previamente"));
+    gtk_container_add(GTK_CONTAINER(vbox), create_label("3.- Comer 10 fichas del oponente"));
+    gtk_container_add(GTK_CONTAINER(vbox), create_label("Para comer las fichas del oponente, se debe de encerrar dos fichas consecutivas del mismo color y a los extremos\nde estas, dos del color contrario."));
+    gtk_container_add(GTK_CONTAINER(vbox), create_label("Se pueden realizar comidas múltiples al encerrar dos pares de fichas de tu oponente, en diferentes direcciones."));
+
+    gtk_widget_show_all(window);
+
+    return window;
+}
+
+GtkWidget *about_us_window() {
+    GtkWidget *window, *vbox;
+
+    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title(GTK_WINDOW(window), "Pente v1.0");
+    gtk_container_set_border_width(GTK_CONTAINER(window), 10);
+
+    g_signal_connect(window, "delete-event", G_CALLBACK(close_about_us), NULL);
+
+    vbox = gtk_vbox_new(TRUE, 3);
+    gtk_container_add(GTK_CONTAINER(window), vbox);
+
+    gtk_container_add(GTK_CONTAINER(vbox), create_label("About us"));
+    gtk_container_add(GTK_CONTAINER(vbox), create_label("Programa desarrollado por:"));
+    gtk_container_add(GTK_CONTAINER(vbox), create_label("Estibaliz Cano, Isabel León, Cristobal Liendo."));
+    gtk_container_add(GTK_CONTAINER(vbox), create_label("Universidad Iberoamericana"));
+    gtk_container_add(GTK_CONTAINER(vbox), create_label("Programación Aplicada y Laboratorio"));
+    gtk_container_add(GTK_CONTAINER(vbox), create_label("Mtro. Jorge Rodríguez"));
+
+    gtk_widget_show_all(window);
+
+    return window;
+}

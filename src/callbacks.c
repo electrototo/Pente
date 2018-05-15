@@ -151,10 +151,11 @@ void redo(GtkWidget *widget, gpointer data) {
 } 
 
 void tutorial(GtkWidget *widget, gpointer data) {
+    tutorial_window();
 } 
 
 void about_us(GtkWidget *widget, gpointer data) {
-    printf("About us\n");
+    about_us_window();
 } 
 
 gboolean delete_event(GtkWidget *widget, GdkEvent *event, gpointer data) {
@@ -319,4 +320,8 @@ void close_winner_dialog(GtkWidget *widget, gpointer data) {
 
     gtk_widget_destroy(gtk_widget_get_parent(widget));
     destroy(widget, data);
+}
+
+void close_about_us(GtkWidget *widget, gpointer data) {
+    gtk_widget_destroy(widget);
 }

@@ -183,7 +183,6 @@ void chooser_callback(GtkWidget *widget, gint response_id, gpointer data);
 * 
 * @author Estibaliz Cano, Isabel León, Cristobal Liendo
 * @param *widget Dirección de la ventana principal.
-* @param response_id Indica el botón que oprimió el usuario en el cuadro de diálogo.
 * @param data Contiene toda la información del estado del juego.
 * @return void
 **/
@@ -194,7 +193,6 @@ void set_player_name(GtkWidget *widget, gpointer data);
 * 
 * @author Estibaliz Cano, Isabel León, Cristobal Liendo
 * @param *widget Dirección de la ventana principal.
-* @param response_id Indica el botón que oprimió el usuario en el cuadro de diálogo.
 * @param data Contiene toda la información del estado del juego.
 * @return void
 **/
@@ -204,10 +202,19 @@ void close_winner_dialog(GtkWidget *widget, gpointer data);
 * 
 * @author Estibaliz Cano, Isabel León, Cristobal Liendo
 * @param *widget Dirección de la ventana principal.
-* @param response_id Indica el botón que oprimió el usuario en el cuadro de diálogo.
 * @param data Contiene toda la información del estado del juego.
 * @return void
 **/
 void new_game_winner(GtkWidget *widget, gpointer data);
+
+/**
+* 
+* Cierra la venta de about us y del tutorial
+* @author Estibaliz Cano, Isabel León, Cristobal Liendo
+* @param *widget Dirección de la ventana principal.
+* @param data Contiene toda la información del estado del juego.
+* @return void
+**/
+void close_about_us(GtkWidget *widget, gpointer data);
 
 #endif

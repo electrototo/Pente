@@ -31,7 +31,6 @@ int main(int argc, char **argv) {
     gtk_init(&argc, &argv);
 
     game_data->main_board = main_window_board(game_data);
-    printf("hey\n");
 
     // welcome vbox
     welcome_screen = create_splash_screen(game_data);
