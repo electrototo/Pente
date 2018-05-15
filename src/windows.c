@@ -108,6 +108,7 @@ void show_winner(gpointer data) {
     game_info_t *game_data = (game_info_t *) data;
 
     winner_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title(GTK_WINDOW(winner_window), "Pente v1.0");
     gtk_container_set_border_width(GTK_CONTAINER(winner_window), 30);
 
     gtk_window_set_title(GTK_WINDOW(winner_window), "WINNER!");
@@ -152,6 +153,7 @@ void get_player_names_window(gpointer data) {
     GtkWidget *vbox, *hbox;
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title(GTK_WINDOW(window), "Pente v1.0");
     accept = gtk_button_new_with_label("Continue");
 
     vbox = gtk_vbox_new(TRUE, 0);
@@ -206,6 +208,7 @@ GtkWidget *main_window_board(game_info_t *game_data) {
     // final tablero principal
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title(GTK_WINDOW(window), "Pente v1.0");
     g_signal_connect(window, "delete-event", G_CALLBACK(delete_event), game_data);
 
     GtkWidget *token, *white;
