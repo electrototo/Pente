@@ -122,19 +122,19 @@ void save_as(GtkWidget *widget, gpointer data) {
 } 
 
 void quit(GtkWidget *widget, gpointer data) {
+    gtk_main_quit();
 } 
 
 void undo(GtkWidget *widget, gpointer data) {
-    game_info_t *game_info = (game_info_t *) data; 
+    game_info_t *game_data = (game_info_t *) data; 
     GdkPixbuf *turn_image;
 
-    if (game_info->head->sig != NULL) {
-        game_info->head = game_info->head->sig;
+    if (game_data->head->sig != NULL) {
+        game_data->head = game_data->head->sig;
 
-        clear_board(game_info->pente_board, game_info);
-        load_from_list(game_info, game_info->head->child);
+        clear_board(game_data->pente_board, game_data);
+        load_from_list(game_data, game_data->head->child);
     }
-
 } 
 
 void redo(GtkWidget *widget, gpointer data) {
