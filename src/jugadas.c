@@ -47,7 +47,7 @@ void coordinates(int **pente, int cor_x, int cor_y, int turno, game_info_t *game
 
     game_data->head->child = create_list(game_data);
 
-    print(pente);
+    //print(pente);
     contador = game_data->head->items;
 }
 
@@ -110,7 +110,7 @@ void load_plays(game_info_t *game_data) {
     strcpy(game_data->player1, game_data->head->player1);
     strcpy(game_data->player2, game_data->head->player2);
 
-    print(game_data->pente_board);
+    //print(game_data->pente_board);
 }
 
 void load_from_list(game_info_t *game_data, plays_t *head) {
