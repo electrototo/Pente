@@ -123,10 +123,10 @@ void load_from_list(game_info_t *game_data, plays_t *head) {
 
         if (cursor == head) {
            if (cursor->token_value == VAL2)
-               turn_image = gdk_pixbuf_new_from_file("imagenes/red_token.jpg", NULL);
+               turn_image = gdk_pixbuf_new_from_file("imagenes/blue_token.jpg", NULL);
 
            if (cursor->token_value == VAL1)
-               turn_image = gdk_pixbuf_new_from_file("imagenes/blue_token.jpg", NULL);
+               turn_image = gdk_pixbuf_new_from_file("imagenes/red_token.jpg", NULL);
 
            gtk_image_set_from_pixbuf(GTK_IMAGE(game_data->turn_image), turn_image);
         }

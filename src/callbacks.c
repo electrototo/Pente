@@ -25,10 +25,6 @@ gboolean image_press_callback(GtkWidget *event_box, GdkEventButton *event, gpoin
     GdkPixbuf *new_image, *turn_image;
     char pbuffer[10];
 
-    /*printf("Click at: %d, %d\n", img_data->x, img_data->y);
-    printf("Player 1 points: %d, Player 2 points: %d\n",
-        game_data->head->score1, game_data->head->score2);*/
-
     if (valid_position(game_data->pente_board, img_data->x, img_data->y)) {
         print(game_data->pente_board);
 

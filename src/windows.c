@@ -166,7 +166,6 @@ void get_player_names_window(gpointer data) {
     // tabla de jugador 1
     hbox = gtk_hbox_new(TRUE, 0);
 
-    // falta conectar al picar enter
     entry = gtk_entry_new();
     info_packet->player1 = entry;
 
